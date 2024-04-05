@@ -17,4 +17,9 @@ public class Category extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, unique = true)
     private CategoryName categoryName;
+
+    //테스트용
+    public Category(CategoryName categoryName) {
+        this.categoryName = categoryName;
+    }
 }

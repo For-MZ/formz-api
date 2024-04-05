@@ -3,12 +3,10 @@ package ForMZ.Server.domain.post.service;
 import ForMZ.Server.domain.bookmark.repository.BookmarkRepository;
 import ForMZ.Server.domain.category.entity.Category;
 import ForMZ.Server.domain.category.service.CategoryService;
-import ForMZ.Server.domain.post.dto.AllPostRes;
-import ForMZ.Server.domain.post.dto.PostReq;
-import ForMZ.Server.domain.post.dto.PostRes;
-import ForMZ.Server.domain.post.dto.PostUpdateReq;
+import ForMZ.Server.domain.post.dto.*;
 import ForMZ.Server.domain.post.entity.Post;
 import ForMZ.Server.domain.post.exception.InvalidSortParamException;
+import ForMZ.Server.domain.post.exception.PostBySerachNotFoundException;
 import ForMZ.Server.domain.post.exception.PostNotFoundException;
 import ForMZ.Server.domain.post.exception.UnauthorizedPostAccessException;
 import ForMZ.Server.domain.post.mapper.PostMapper;
@@ -19,6 +17,7 @@ import ForMZ.Server.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -147,6 +146,35 @@ public class PostServiceImpl implements PostService {
             return new AllPostRes(mapper.postListToAllPostRes(postList));
         }
             throw new InvalidSortParamException();
+    }
+
+    /**
+     * 검색을 통한 게시글 목록 반환
+     */
+    @Override
+    public AllPostsBySearch getPostsBySearch(String word, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        List<Post> posts = postRepository.findPostsBySearchOrderByCreatedDate(word, pageable);
+        // 일치하는 검색 결과가 없는 경우
+        if (posts.isEmpty()) {
+            throw new PostBySerachNotFoundException();
+        }
+        //TODO: Mapper를 통해 변경
+        List<PostListRes> postsList = posts.stream()
+                .map(p -> {
+                    // 제목, 닉네임, 추천수, 조회 수, 댓글 수 반환
+                    return PostListRes.builder()
+                            .postId(p.getId())
+                            .title(p.getTitle())
+                            .category(p.getCategoryName())
+                            .nickName(p.getUser().getNickName())
+                            .likeCnt(p.getPostLikesCount())
+                            .viewCnt(p.getViews())
+                            .commentCnt(p.getCommentsCount())
+                            .build();
+                }).toList();
+        AllPostsBySearch response = new AllPostsBySearch(postsList);
+        return response;
     }
 
     /**

@@ -1,10 +1,7 @@
 package ForMZ.Server.domain.post.controller;
 
 
-import ForMZ.Server.domain.post.dto.AllPostRes;
-import ForMZ.Server.domain.post.dto.PostReq;
-import ForMZ.Server.domain.post.dto.PostRes;
-import ForMZ.Server.domain.post.dto.PostUpdateReq;
+import ForMZ.Server.domain.post.dto.*;
 import ForMZ.Server.domain.post.entity.Post;
 import ForMZ.Server.domain.post.service.PostService;
 import ForMZ.Server.global.common.ResponseDto;
@@ -78,5 +75,14 @@ public class PostController {
         PostRes res = postService.convertPostRes(post);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.create(HttpStatus.OK.value(), GET_POST_SUCCESS.getMessage(), res));
+    }
+
+    /**
+     * 검색을 통한 게시글 목록 조회
+     */
+    @GetMapping("/posts/search")
+    public ResponseEntity getPostsBySearch(@RequestParam(name = "word") String word, @RequestParam(name = "page") int page) {
+        AllPostsBySearch posts = postService.getPostsBySearch(word, page);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), GET_POST_BY_SEARCH_SUCCESS.getMessage(), posts));
     }
 }

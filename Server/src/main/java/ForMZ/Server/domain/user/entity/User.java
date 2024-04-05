@@ -37,6 +37,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Valid
     @Column(nullable = false)
     private String nickName;
 
@@ -70,12 +71,17 @@ public class User extends BaseEntity implements UserDetails {
     @JoinColumn(name = "profileImageId", referencedColumnName = "file_id")
     private File profileImage;
 
+    public enum Role{
+        USER,
+        ADMIN
+    }
+
     public enum SignType{
         NORMAL,
         GOOGLE,
         KAKAO
     }
-
+  
     public void updateRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
@@ -121,5 +127,13 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    
+      //테스트 용 생성자
+    public User(String email, String password, String nickName, Role role, SignType signType) {
+        this.email = email;
+        this.password = password;
+        this.nickName = nickName;
+        this.role = role;
+        this.signType = signType;
     }
 }

@@ -1,9 +1,6 @@
 package ForMZ.Server.domain.post.service;
 
-import ForMZ.Server.domain.post.dto.AllPostRes;
-import ForMZ.Server.domain.post.dto.PostReq;
-import ForMZ.Server.domain.post.dto.PostRes;
-import ForMZ.Server.domain.post.dto.PostUpdateReq;
+import ForMZ.Server.domain.post.dto.*;
 import ForMZ.Server.domain.post.entity.Post;
 
 public interface PostService {
@@ -14,4 +11,5 @@ public interface PostService {
     AllPostRes getPosts(String sort, String categoryCode, int page, int size);
     PostRes convertPostRes(Post post);
     void viewPlus(Post post);
+    AllPostsBySearch getPostsBySearch(String word, int page);
 }

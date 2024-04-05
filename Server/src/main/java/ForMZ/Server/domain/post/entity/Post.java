@@ -95,4 +95,9 @@ public class Post extends BaseEntity {
     public int getCommentsCount(){
         return this.comments.size();
     }
+
+    //카테고리 이름 반환 함수
+    public String getCategoryName() {
+        return this.category.getCategoryName().getCategoryName();
+    }
 }
