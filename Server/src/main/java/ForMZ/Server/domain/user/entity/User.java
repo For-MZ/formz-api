@@ -8,17 +8,23 @@ import ForMZ.Server.domain.post.entity.Post;
 import ForMZ.Server.domain.postLike.entity.PostLike;
 import ForMZ.Server.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
-public class User extends BaseEntity {
+@AllArgsConstructor
+public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -28,7 +34,6 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    @Valid
     @Column(nullable = false)
     private String password;
 
@@ -36,13 +41,16 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String nickName;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private SignType signType;
+
+    @Column
+    private String refreshToken;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Comment> comments = new ArrayList<>();
@@ -73,6 +81,10 @@ public class User extends BaseEntity {
         GOOGLE,
         KAKAO
     }
+  
+    public void updateRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
 
     public void updateProfile(String email, String password, String nickName, String profileImage){
         this.email = email;
@@ -81,7 +93,42 @@ public class User extends BaseEntity {
         this.profileImage.updateFileUrl(profileImage);
     }
 
-    //테스트 용 생성자
+    /**
+     * UserDetails Implements
+     */
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    
+      //테스트 용 생성자
     public User(String email, String password, String nickName, Role role, SignType signType) {
         this.email = email;
         this.password = password;
