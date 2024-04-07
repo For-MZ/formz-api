@@ -28,7 +28,8 @@ public class SecurityConfig {
                 // TODO: 요청에 따른 허가 범위 설정 추가
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                new AntPathRequestMatcher("/login")
+                                new AntPathRequestMatcher("/login"),
+                                new AntPathRequestMatcher("/email")
                         ).permitAll()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/my-page")

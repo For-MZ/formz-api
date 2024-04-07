@@ -1,7 +1,9 @@
 package ForMZ.Server.domain.user.service;
 
+import ForMZ.Server.domain.user.dto.UserReq;
 import ForMZ.Server.domain.user.entity.User;
 import ForMZ.Server.domain.user.exception.UserNotFoundException;
+import ForMZ.Server.domain.user.mapper.UserMapper;
 import ForMZ.Server.domain.user.repository.UserRepository;
 import ForMZ.Server.global.auth.jwt.dto.JwtToken;
 import ForMZ.Server.global.auth.jwt.dto.LoginReq;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
+    private final UserMapper mapper;
     private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -56,5 +59,21 @@ public class UserServiceImpl implements UserService{
 
         // 인증 정보를 기반으로 JWT 토큰 생성
         return jwtTokenProvider.generateToken(authentication);
+    }
+
+    /**
+     * 회원가입
+     */
+    public void createUser(UserReq userReq){
+        User user = mapper.userReqToUser(userReq);
+        userRepository.save(user);
+    }
+
+    /**
+     * 이메일로 유저 찾기
+     */
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
     }
 }

@@ -2,11 +2,15 @@ package ForMZ.Server.domain.file.entity;
 
 import ForMZ.Server.global.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class File extends BaseEntity {
     @Id
