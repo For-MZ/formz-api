@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -30,9 +31,12 @@ public class OAuthRequestUtil {
         return new RestTemplate().exchange(property.getUserInfoUri(), HttpMethod.GET, new HttpEntity<>(headers), Map.class).getBody();
     }
 
-    // TODO : Authorization Code 에러 처리
     private String getOAuthAccessToken(OAuthProperty.PropertyInfo property, String code) {
-        return new RestTemplate().exchange(property.getTokenUri(), HttpMethod.POST, new HttpEntity<>(setQueryParams(property, code), null), OAuthToken.class).getBody().getAccessToken();
+        try {
+            return new RestTemplate().exchange(property.getTokenUri(), HttpMethod.POST, new HttpEntity<>(setQueryParams(property, code), null), OAuthToken.class).getBody().getAccessToken();
+        } catch (Exception e) {
+            throw new AuthorizationCodeErrorException();
+        }
     }
 
     private MultiValueMap<String, String> setQueryParams(OAuthProperty.PropertyInfo property, String code) {

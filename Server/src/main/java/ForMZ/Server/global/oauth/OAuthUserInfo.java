@@ -20,7 +20,7 @@ public class OAuthUserInfo {
             case "google" -> toGoogleUserInfo(target, attribute);
             case "kakao" -> toKakaoUserInfo(target, attribute);
             case "naver" -> toNaverUserInfo(target, attribute);
-            default -> null;
+            default -> throw new SocialTypeNotFoundException();
         };
     }
 
