@@ -1,4 +1,4 @@
-package ForMZ.Server.global.jwt;
+package ForMZ.Server.global.jwt.exception;
 
 import ForMZ.Server.global.exception.ApplicationException;
 import org.springframework.http.HttpStatus;
