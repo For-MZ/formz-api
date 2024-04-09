@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -19,7 +18,7 @@ public class OAuthRequestUtil {
     private final OAuthProperty oAuthProperty;
 
     public OAuthUserInfo getOAuthUserInfo(String target, String code) {
-        OAuthProperty.PropertyInfo property = oAuthProperty.getProperties().get(target);
+        OAuthProperty.PropertyInfo property = getOAuthProperty(target);
         Map<String, Object> userInfo = getUserInfo(property, getOAuthAccessToken(property, code));
         return OAuthUserInfo.getOAuthUserInfoBySocial(target, userInfo);
     }
@@ -47,5 +46,11 @@ public class OAuthRequestUtil {
         params.add("code", code);
         params.add("grant_type", "authorization_code");
         return params;
+    }
+
+    private OAuthProperty.PropertyInfo getOAuthProperty(String target) {
+        OAuthProperty.PropertyInfo propertyInfo = oAuthProperty.getProperties().get(target);
+        if (propertyInfo == null) throw new SocialTypeNotFoundException();
+        return propertyInfo;
     }
 }

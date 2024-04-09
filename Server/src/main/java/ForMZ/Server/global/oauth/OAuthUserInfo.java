@@ -14,7 +14,6 @@ public class OAuthUserInfo {
 
     private String email;
 
-    // TODO : 예외처리 추가
     public static OAuthUserInfo getOAuthUserInfoBySocial(String target, Map<String, Object> attribute) {
         return switch (target) {
             case "google" -> toGoogleUserInfo(target, attribute);
