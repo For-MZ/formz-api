@@ -1,5 +1,9 @@
 package ForMZ.Server.global.oauth;
 
+import ForMZ.Server.global.oauth.dto.OAuthToken;
+import ForMZ.Server.global.oauth.dto.OAuthUserInfo;
+import ForMZ.Server.global.oauth.exception.AuthorizationCodeErrorException;
+import ForMZ.Server.global.oauth.exception.SocialTypeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

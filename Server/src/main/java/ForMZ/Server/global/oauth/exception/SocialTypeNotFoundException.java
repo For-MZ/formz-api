@@ -1,4 +1,4 @@
-package ForMZ.Server.global.oauth;
+package ForMZ.Server.global.oauth.exception;
 
 import ForMZ.Server.global.exception.ApplicationException;
 import org.springframework.http.HttpStatus;

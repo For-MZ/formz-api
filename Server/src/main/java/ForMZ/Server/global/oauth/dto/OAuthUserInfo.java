@@ -1,5 +1,6 @@
-package ForMZ.Server.global.oauth;
+package ForMZ.Server.global.oauth.dto;
 
+import ForMZ.Server.global.oauth.exception.SocialTypeNotFoundException;
 import lombok.Builder;
 import lombok.Getter;
 
