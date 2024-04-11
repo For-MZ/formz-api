@@ -15,6 +15,8 @@ public class OAuthUserInfo {
 
     private String email;
 
+    private String imageUrl;
+
     public static OAuthUserInfo getOAuthUserInfoBySocial(String target, Map<String, Object> attribute) {
         return switch (target) {
             case "google" -> toGoogleUserInfo(target, attribute);
@@ -29,15 +31,18 @@ public class OAuthUserInfo {
                 .socialType(social.toUpperCase())
                 .socialId((String) attribute.get("id"))
                 .email((String) attribute.get("email"))
+                .imageUrl((String) attribute.get("picture"))
                 .build();
     }
 
     private static OAuthUserInfo toKakaoUserInfo(String social, Map<String, Object> attribute) {
         Map<String, Object> kakaoAccount = (Map<String, Object>) attribute.get("kakao_account");
+        Map<String, Object> properties = (Map<String, Object>) attribute.get("properties");
         return OAuthUserInfo.builder()
                 .socialType(social.toUpperCase())
-                .socialId((String) attribute.get("id"))
+                .socialId(String.valueOf(attribute.get("id")))
                 .email((String) kakaoAccount.get("email"))
+                .imageUrl((String) properties.get("profile_image"))
                 .build();
     }
 
@@ -47,6 +52,7 @@ public class OAuthUserInfo {
                 .socialType(social.toUpperCase())
                 .socialId((String) naverAccount.get("id"))
                 .email((String) naverAccount.get("email"))
+                .imageUrl((String) naverAccount.get("profile_image"))
                 .build();
     }
 }
