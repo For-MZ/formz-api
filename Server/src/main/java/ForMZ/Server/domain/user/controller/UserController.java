@@ -5,8 +5,6 @@ import ForMZ.Server.domain.user.dto.MailReq;
 import ForMZ.Server.domain.user.dto.MailRes;
 import ForMZ.Server.domain.user.service.MailSenderService;
 import ForMZ.Server.domain.user.service.UserService;
-import ForMZ.Server.global.auth.jwt.dto.JwtToken;
-import ForMZ.Server.global.auth.jwt.dto.LoginReq;
 import ForMZ.Server.global.common.ResponseDto;
 import ForMZ.Server.domain.user.dto.UserReq;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +24,11 @@ public class UserController {
     /**
      * 일반 로그인
      */
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginReq loginReq){
-        JwtToken jwtToken = userService.Login(loginReq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.create(HttpStatus.CREATED.value(), LOGIN_USER_SUCCESS.getMessage(), jwtToken));
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity login(@RequestBody LoginReq loginReq){
+//        JwtToken jwtToken = userService.Login(loginReq);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.create(HttpStatus.CREATED.value(), LOGIN_USER_SUCCESS.getMessage(), jwtToken));
+//    }
 
     /**
      * 회원가입
