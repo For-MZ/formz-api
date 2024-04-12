@@ -65,4 +65,8 @@ public class User extends BaseEntity {
         this.password = password;
         this.nickName = nickName;
     }
+
+    public void updateOAuthInfo(OAuthUserInfo oAuthUserInfo) {
+        this.email = oAuthUserInfo.getEmail();
+    }
 }
