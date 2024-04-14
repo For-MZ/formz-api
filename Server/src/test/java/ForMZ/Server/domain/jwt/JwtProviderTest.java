@@ -1,4 +1,4 @@
-package ForMZ.Server.global.jwt;
+package ForMZ.Server.domain.jwt;
 
 import ForMZ.Server.domain.jwt.JwtFactory;
 import ForMZ.Server.domain.jwt.JwtProperty;
