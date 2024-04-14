@@ -1,7 +1,7 @@
-package ForMZ.Server.global.jwt;
+package ForMZ.Server.domain.jwt;
 
-import ForMZ.Server.global.jwt.exception.JwtExpirationException;
-import ForMZ.Server.global.jwt.exception.JwtModulationException;
+import ForMZ.Server.domain.jwt.exception.JwtExpirationException;
+import ForMZ.Server.domain.jwt.exception.JwtModulationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;

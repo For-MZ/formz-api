@@ -1,7 +1,10 @@
 package ForMZ.Server.global.jwt;
 
-import ForMZ.Server.global.jwt.exception.JwtExpirationException;
-import ForMZ.Server.global.jwt.exception.JwtModulationException;
+import ForMZ.Server.domain.jwt.JwtFactory;
+import ForMZ.Server.domain.jwt.JwtProperty;
+import ForMZ.Server.domain.jwt.JwtProvider;
+import ForMZ.Server.domain.jwt.exception.JwtExpirationException;
+import ForMZ.Server.domain.jwt.exception.JwtModulationException;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

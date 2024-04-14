@@ -1,6 +1,6 @@
 package ForMZ.Server.global.config;
 
-import ForMZ.Server.global.jwt.JwtProvider;
+import ForMZ.Server.domain.jwt.JwtProvider;
 import ForMZ.Server.global.security.AuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

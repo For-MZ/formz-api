@@ -1,4 +1,4 @@
-package ForMZ.Server.global.jwt;
+package ForMZ.Server.domain.jwt;
 
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
