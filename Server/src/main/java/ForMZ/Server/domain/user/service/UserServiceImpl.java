@@ -1,19 +1,17 @@
 package ForMZ.Server.domain.user.service;
 
-import ForMZ.Server.domain.user.dto.LoginRes;
+import ForMZ.Server.domain.jwt.JwtService;
+import ForMZ.Server.domain.jwt.JwtToken;
 import ForMZ.Server.domain.user.dto.UserReq;
 import ForMZ.Server.domain.user.entity.User;
 import ForMZ.Server.domain.user.exception.UserNotFoundException;
 import ForMZ.Server.domain.user.mapper.UserMapper;
 import ForMZ.Server.domain.user.repository.UserRepository;
-import ForMZ.Server.domain.jwt.JwtFactory;
 import ForMZ.Server.global.oauth.OAuthRequestUtil;
 import ForMZ.Server.global.oauth.dto.OAuthUserInfo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +20,7 @@ public class UserServiceImpl implements UserService{
     private final UserMapper mapper;
     private final UserRepository userRepository;
     private final OAuthRequestUtil oAuthRequestUtil;
-    private final JwtFactory jwtFactory;
+    private final JwtService jwtService;
 
     /**
      * UserId를 통한 유저 조회
@@ -84,7 +82,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public LoginRes loginOAuth(String target, String code) {
+    public JwtToken loginOAuth(String target, String code) {
         OAuthUserInfo oAuthUserInfo = oAuthRequestUtil.getOAuthUserInfo(target, code);
 
         User user = userRepository.findBySignTypeAndSocialId(oAuthUserInfo.getSocialType(), oAuthUserInfo.getSocialId())
@@ -93,10 +91,6 @@ public class UserServiceImpl implements UserService{
                     return existUser;
                 })
                 .orElse(userRepository.save(User.toEntity(oAuthUserInfo)));
-
-        // TODO : JWT Service 변경
-        String accessToken = jwtFactory.createAccessToken(user.getId());
-
-        return LoginRes.toDto(accessToken);
+        return jwtService.createJwtToken(user.getId());
     }
 }
