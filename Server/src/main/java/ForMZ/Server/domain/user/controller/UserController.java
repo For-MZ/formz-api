@@ -1,21 +1,16 @@
 package ForMZ.Server.domain.user.controller;
 
-import ForMZ.Server.domain.user.constant.UserConstant;
+import ForMZ.Server.domain.user.dto.LoginRes;
 import ForMZ.Server.domain.user.dto.MailReq;
 import ForMZ.Server.domain.user.dto.MailRes;
 import ForMZ.Server.domain.user.service.MailSenderService;
 import ForMZ.Server.domain.user.service.UserService;
-import ForMZ.Server.global.auth.jwt.dto.JwtToken;
-import ForMZ.Server.global.auth.jwt.dto.LoginReq;
 import ForMZ.Server.global.common.ResponseDto;
 import ForMZ.Server.domain.user.dto.UserReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static ForMZ.Server.domain.user.constant.UserConstant.AuthResponseMessage.*;
 
@@ -29,11 +24,11 @@ public class UserController {
     /**
      * 일반 로그인
      */
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginReq loginReq){
-        JwtToken jwtToken = userService.Login(loginReq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.create(HttpStatus.CREATED.value(), LOGIN_USER_SUCCESS.getMessage(), jwtToken));
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity login(@RequestBody LoginReq loginReq){
+//        JwtToken jwtToken = userService.Login(loginReq);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.create(HttpStatus.CREATED.value(), LOGIN_USER_SUCCESS.getMessage(), jwtToken));
+//    }
 
     /**
      * 회원가입
@@ -54,5 +49,11 @@ public class UserController {
         MailRes res = mailSenderService.joinEmail(mailReq.getEmail());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.create(HttpStatus.OK.value(), MAIL_SEND_SUCCESS.getMessage(), res));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginOAuth(@RequestParam("target") String target, @RequestParam("code") String code) {
+        LoginRes loginRes = userService.loginOAuth(target, code);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), loginRes));
     }
 }
