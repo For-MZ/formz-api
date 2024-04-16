@@ -4,7 +4,7 @@ import ForMZ.Server.domain.user.dto.LoginRes;
 import ForMZ.Server.domain.user.entity.User;
 import ForMZ.Server.domain.user.repository.UserRepository;
 import ForMZ.Server.domain.user.service.UserServiceImpl;
-import ForMZ.Server.global.jwt.JwtFactory;
+import ForMZ.Server.domain.jwt.JwtFactory;
 import ForMZ.Server.global.oauth.OAuthRequestUtil;
 import ForMZ.Server.global.oauth.dto.OAuthUserInfo;
 import org.junit.jupiter.api.DisplayName;

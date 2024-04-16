@@ -6,7 +6,7 @@ import ForMZ.Server.domain.user.entity.User;
 import ForMZ.Server.domain.user.exception.UserNotFoundException;
 import ForMZ.Server.domain.user.mapper.UserMapper;
 import ForMZ.Server.domain.user.repository.UserRepository;
-import ForMZ.Server.global.jwt.JwtFactory;
+import ForMZ.Server.domain.jwt.JwtFactory;
 import ForMZ.Server.global.oauth.OAuthRequestUtil;
 import ForMZ.Server.global.oauth.dto.OAuthUserInfo;
 import jakarta.transaction.Transactional;
