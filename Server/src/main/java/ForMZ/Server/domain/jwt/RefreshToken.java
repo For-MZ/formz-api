@@ -4,20 +4,25 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
 @Getter
 @Builder
-@RedisHash(value = "refreshToken", timeToLive = 1209600)
+@RedisHash("refreshToken")
 public class RefreshToken {
     @Id
-    private String refreshToken;
+    private String value;
 
     private long userId;
 
+    @TimeToLive
+    private long ttl;
+
     public static RefreshToken toEntity(String refreshToken, long userId) {
         return RefreshToken.builder()
-                .refreshToken(refreshToken)
+                .value(refreshToken)
                 .userId(userId)
+                .ttl(Long.parseLong(System.getProperty("jwt.refresh.expiration")) / 1000)
                 .build();
     }
 }
