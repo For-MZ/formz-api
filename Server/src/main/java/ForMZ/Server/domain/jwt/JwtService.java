@@ -14,6 +14,6 @@ public class JwtService {
     @Transactional
     public JwtToken createJwtToken(long userId) {
         RefreshToken refreshToken = jwtRepository.save(RefreshToken.toEntity(jwtFactory.createRefreshToken(), userId));
-        return new JwtToken(jwtFactory.createAccessToken(userId), refreshToken.getRefreshToken());
+        return new JwtToken(jwtFactory.createAccessToken(userId), refreshToken.getValue());
     }
 }

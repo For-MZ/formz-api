@@ -49,7 +49,7 @@ public class JwtRepositoryTest {
         // then
         assertThat(optional).isNotEmpty();
         RefreshToken refreshToken = optional.get();
-        assertThat(refreshToken.getRefreshToken()).isEqualTo(token);
+        assertThat(refreshToken.getValue()).isEqualTo(token);
         assertThat(refreshToken.getUserId()).isEqualTo(userId);
     }
 
