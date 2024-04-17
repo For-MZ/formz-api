@@ -42,7 +42,7 @@ public class UserControllerTest {
         // given
         String social = "social";
         String code = "code";
-        LoginRes loginRes = LoginRes.toDto("토큰");
+        LoginRes loginRes = new LoginRes("토큰");
         doReturn(loginRes).when(userService).loginOAuth(social, code);
 
         // when
@@ -50,7 +50,7 @@ public class UserControllerTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.accessToken").value(loginRes.getAccessToken()));
+                .andExpect(jsonPath("$.data.accessToken").value(loginRes.accessToken()));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package ForMZ.Server.domain.user.controller;
 
 import ForMZ.Server.domain.jwt.JwtToken;
+import ForMZ.Server.domain.user.dto.LoginRes;
 import ForMZ.Server.domain.user.dto.MailReq;
 import ForMZ.Server.domain.user.dto.MailRes;
 import ForMZ.Server.domain.user.service.MailSenderService;
@@ -54,6 +55,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginOAuth(@RequestParam("target") String target, @RequestParam("code") String code) {
         JwtToken jwtToken = userService.loginOAuth(target, code);
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), jwtToken));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), new LoginRes(jwtToken.accessToken())));
     }
 }
