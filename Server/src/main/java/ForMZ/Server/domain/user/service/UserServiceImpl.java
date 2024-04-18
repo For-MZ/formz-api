@@ -9,7 +9,7 @@ import ForMZ.Server.domain.user.mapper.UserMapper;
 import ForMZ.Server.domain.user.repository.UserRepository;
 import ForMZ.Server.global.oauth.OAuthRequestUtil;
 import ForMZ.Server.global.oauth.dto.OAuthUserInfo;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
