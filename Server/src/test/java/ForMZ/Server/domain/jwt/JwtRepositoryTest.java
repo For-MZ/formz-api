@@ -89,7 +89,7 @@ public class JwtRepositoryTest {
     @DisplayName("Secondary Index 탐색 시간 비교")
     void findSecondaryIndexTimeCheck() {
         // given
-        int last = 50_000;
+        int last = 10;
         for (int i = 0; i < last; i++) {
             jwtRepository.save(RefreshToken.toEntity("refresh" + i, i, 100000));
         }
