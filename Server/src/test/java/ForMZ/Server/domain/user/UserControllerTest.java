@@ -1,10 +1,11 @@
 package ForMZ.Server.domain.user;
 
+import ForMZ.Server.domain.jwt.JwtToken;
 import ForMZ.Server.domain.user.controller.UserController;
-import ForMZ.Server.domain.user.dto.LoginRes;
 import ForMZ.Server.domain.user.service.MailSenderService;
 import ForMZ.Server.domain.user.service.UserService;
 import ForMZ.Server.global.config.TestConfig;
+import ForMZ.Server.global.cookie.CookieUtil;
 import ForMZ.Server.global.oauth.exception.AuthorizationCodeErrorException;
 import ForMZ.Server.global.oauth.exception.SocialTypeNotFoundException;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +34,9 @@ public class UserControllerTest {
     @MockBean
     MailSenderService mailSenderService;
 
+    @MockBean
+    CookieUtil cookieUtil;
+
     @Autowired
     MockMvc mvc;
 
@@ -42,15 +46,15 @@ public class UserControllerTest {
         // given
         String social = "social";
         String code = "code";
-        LoginRes loginRes = new LoginRes("토큰");
-        doReturn(loginRes).when(userService).loginOAuth(social, code);
+        JwtToken jwtToken = new JwtToken("엑세스 토큰", "리프레시 토큰");
+        doReturn(jwtToken).when(userService).loginOAuth(social, code);
 
         // when
         ResultActions perform = mvc.perform(post("/login").param("target", social).param("code", code));
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.accessToken").value(loginRes.accessToken()));
+                .andExpect(jsonPath("$.data.accessToken").value(jwtToken.accessToken()));
     }
 
     @Test
