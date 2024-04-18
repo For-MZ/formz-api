@@ -18,6 +18,10 @@ public class CookieUtil {
         setCookie(response, maxAge / 1000, refreshToken);
     }
 
+    public void deleteRefreshTokenInCookie(HttpServletResponse response) {
+        setCookie(response, 0, null);
+    }
+
     private void setCookie(HttpServletResponse response, long maxAge, String value) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_HEADER, value)
                 .httpOnly(true)

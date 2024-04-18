@@ -61,4 +61,10 @@ public class UserController {
         cookieUtil.setRefreshTokenInCookie(response, jwtToken.refreshToken());
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), new LoginRes(jwtToken.accessToken())));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        cookieUtil.deleteRefreshTokenInCookie(response);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), null));
+    }
 }
