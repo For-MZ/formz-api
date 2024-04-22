@@ -16,7 +16,7 @@ public class JwtController {
 
     @PostMapping("/refresh")
     public ResponseEntity<?> reIssueAccessToken(@CookieValue("Refresh") String refreshToken) {
-        String accessToken = jwtService.reIssueAccessToken(refreshToken);
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), "", accessToken));
+        JwtTokenRes jwtTokenRes = jwtService.reIssueAccessToken(refreshToken);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), "", jwtTokenRes));
     }
 }
