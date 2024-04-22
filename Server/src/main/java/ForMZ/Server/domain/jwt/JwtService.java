@@ -15,15 +15,15 @@ public class JwtService {
     private final JwtRepository jwtRepository;
 
     @Transactional
-    public JwtToken createJwtToken(long userId) {
+    public JwtTokenRes createJwtToken(long userId) {
         RefreshToken refreshToken = jwtRepository.findByUserId(userId)
                 .orElse(jwtRepository.save(RefreshToken.toEntity(jwtFactory.createRefreshToken(), userId, jwtProperty.getRefreshExpiration())));
-        return new JwtToken(jwtFactory.createAccessToken(userId), refreshToken.getValue());
+        return new JwtTokenRes(jwtFactory.createAccessToken(userId), refreshToken.getValue());
     }
 
-    public String reIssueAccessToken(String token) {
+    public JwtTokenRes reIssueAccessToken(String token) {
         jwtProvider.verifyRefreshToken(token);
         RefreshToken refreshToken = jwtRepository.findById(token).orElseThrow(NotFoundRefreshTokenException::new);
-        return jwtFactory.createAccessToken(refreshToken.getUserId());
+        return new JwtTokenRes(jwtFactory.createAccessToken(refreshToken.getUserId()), token);
     }
 }

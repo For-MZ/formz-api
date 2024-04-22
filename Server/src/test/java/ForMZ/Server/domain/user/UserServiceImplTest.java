@@ -1,7 +1,7 @@
 package ForMZ.Server.domain.user;
 
 import ForMZ.Server.domain.jwt.JwtService;
-import ForMZ.Server.domain.jwt.JwtToken;
+import ForMZ.Server.domain.jwt.JwtTokenRes;
 import ForMZ.Server.domain.user.entity.User;
 import ForMZ.Server.domain.user.repository.UserRepository;
 import ForMZ.Server.domain.user.service.UserServiceImpl;
@@ -47,14 +47,14 @@ public class UserServiceImplTest {
         doReturn(oAuthUserInfo).when(oAuthRequestUtil).getOAuthUserInfo(anyString(), anyString());
         doReturn(Optional.empty()).when(userRepository).findBySignTypeAndSocialId(oAuthUserInfo.getSocialType(), oAuthUserInfo.getSocialId());
         doReturn(user).when(userRepository).save(any());
-        doReturn(new JwtToken(accessToken, refreshToken)).when(jwtService).createJwtToken(user.getId());
+        doReturn(new JwtTokenRes(accessToken, refreshToken)).when(jwtService).createJwtToken(user.getId());
 
         // when
-        JwtToken jwtToken = userService.loginOAuth(anyString(), anyString());
+        JwtTokenRes jwtTokenRes = userService.loginOAuth(anyString(), anyString());
 
         // then
-        assertThat(jwtToken.accessToken()).isEqualTo(accessToken);
-        assertThat(jwtToken.refreshToken()).isEqualTo(refreshToken);
+        assertThat(jwtTokenRes.accessToken()).isEqualTo(accessToken);
+        assertThat(jwtTokenRes.refreshToken()).isEqualTo(refreshToken);
     }
 
     @Test
@@ -69,14 +69,14 @@ public class UserServiceImplTest {
 
         doReturn(oAuthUserInfo).when(oAuthRequestUtil).getOAuthUserInfo(anyString(), anyString());
         doReturn(Optional.of(user)).when(userRepository).findBySignTypeAndSocialId(oAuthUserInfo.getSocialType(), oAuthUserInfo.getSocialId());
-        doReturn(new JwtToken(accessToken, refreshToken)).when(jwtService).createJwtToken(user.getId());
+        doReturn(new JwtTokenRes(accessToken, refreshToken)).when(jwtService).createJwtToken(user.getId());
 
         // when
-        JwtToken jwtToken = userService.loginOAuth(anyString(), anyString());
+        JwtTokenRes jwtTokenRes = userService.loginOAuth(anyString(), anyString());
 
         // then
         assertThat(user.getEmail()).isEqualTo(updateEmail);
-        assertThat(jwtToken.accessToken()).isEqualTo(accessToken);
-        assertThat(jwtToken.refreshToken()).isEqualTo(refreshToken);
+        assertThat(jwtTokenRes.accessToken()).isEqualTo(accessToken);
+        assertThat(jwtTokenRes.refreshToken()).isEqualTo(refreshToken);
     }
 }

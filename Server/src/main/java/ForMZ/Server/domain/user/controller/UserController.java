@@ -1,6 +1,6 @@
 package ForMZ.Server.domain.user.controller;
 
-import ForMZ.Server.domain.jwt.JwtToken;
+import ForMZ.Server.domain.jwt.JwtTokenRes;
 import ForMZ.Server.domain.user.dto.LoginRes;
 import ForMZ.Server.domain.user.dto.MailReq;
 import ForMZ.Server.domain.user.dto.MailRes;
@@ -57,14 +57,14 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginOAuth(@RequestParam("target") String target, @RequestParam("code") String code, HttpServletResponse response) {
-        JwtToken jwtToken = userService.loginOAuth(target, code);
-        cookieUtil.setRefreshTokenInCookie(response, jwtToken.refreshToken());
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), new LoginRes(jwtToken.accessToken())));
+        JwtTokenRes jwtTokenRes = userService.loginOAuth(target, code);
+        cookieUtil.setRefreshTokenInCookie(response, jwtTokenRes.refreshToken());
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), new LoginRes(jwtTokenRes.accessToken())));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
         cookieUtil.deleteRefreshTokenInCookie(response);
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), null));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage()));
     }
 }

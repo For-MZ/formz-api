@@ -1,6 +1,6 @@
 package ForMZ.Server.domain.user;
 
-import ForMZ.Server.domain.jwt.JwtToken;
+import ForMZ.Server.domain.jwt.JwtTokenRes;
 import ForMZ.Server.domain.user.controller.UserController;
 import ForMZ.Server.domain.user.service.MailSenderService;
 import ForMZ.Server.domain.user.service.UserService;
@@ -46,15 +46,15 @@ public class UserControllerTest {
         // given
         String social = "social";
         String code = "code";
-        JwtToken jwtToken = new JwtToken("엑세스 토큰", "리프레시 토큰");
-        doReturn(jwtToken).when(userService).loginOAuth(social, code);
+        JwtTokenRes jwtTokenRes = new JwtTokenRes("엑세스 토큰", "리프레시 토큰");
+        doReturn(jwtTokenRes).when(userService).loginOAuth(social, code);
 
         // when
         ResultActions perform = mvc.perform(post("/login").param("target", social).param("code", code));
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.accessToken").value(jwtToken.accessToken()));
+                .andExpect(jsonPath("$.data.accessToken").value(jwtTokenRes.accessToken()));
     }
 
     @Test

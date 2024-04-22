@@ -1,6 +1,6 @@
 package ForMZ.Server.domain.user.service;
 
-import ForMZ.Server.domain.jwt.JwtToken;
+import ForMZ.Server.domain.jwt.JwtTokenRes;
 import ForMZ.Server.domain.user.dto.UserReq;
 import ForMZ.Server.domain.user.entity.User;
 
@@ -10,5 +10,5 @@ public interface UserService {
     void createUser(UserReq userReq);
     User getUserByEmail(String email);
 
-    JwtToken loginOAuth(String target, String code);
+    JwtTokenRes loginOAuth(String target, String code);
 }

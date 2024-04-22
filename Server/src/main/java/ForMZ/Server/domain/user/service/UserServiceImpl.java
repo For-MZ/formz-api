@@ -1,7 +1,7 @@
 package ForMZ.Server.domain.user.service;
 
 import ForMZ.Server.domain.jwt.JwtService;
-import ForMZ.Server.domain.jwt.JwtToken;
+import ForMZ.Server.domain.jwt.JwtTokenRes;
 import ForMZ.Server.domain.user.dto.UserReq;
 import ForMZ.Server.domain.user.entity.User;
 import ForMZ.Server.domain.user.exception.UserNotFoundException;
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public JwtToken loginOAuth(String target, String code) {
+    public JwtTokenRes loginOAuth(String target, String code) {
         OAuthUserInfo oAuthUserInfo = oAuthRequestUtil.getOAuthUserInfo(target, code);
 
         User user = userRepository.findBySignTypeAndSocialId(oAuthUserInfo.getSocialType(), oAuthUserInfo.getSocialId())

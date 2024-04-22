@@ -47,11 +47,11 @@ public class JwtServiceTest {
         doReturn(RefreshToken.builder().value(refreshToken).build()).when(jwtRepository).save(any());
 
         // when
-        JwtToken jwtToken = jwtService.createJwtToken(anyLong());
+        JwtTokenRes jwtTokenRes = jwtService.createJwtToken(anyLong());
 
         // then
-        assertThat(jwtToken.accessToken()).isEqualTo(accessToken);
-        assertThat(jwtToken.refreshToken()).isEqualTo(refreshToken);
+        assertThat(jwtTokenRes.accessToken()).isEqualTo(accessToken);
+        assertThat(jwtTokenRes.refreshToken()).isEqualTo(refreshToken);
     }
 
     @Test
@@ -66,10 +66,10 @@ public class JwtServiceTest {
         doReturn(accessToken).when(jwtFactory).createAccessToken(refreshToken.getUserId());
 
         // when
-        String refreshAccessToken = jwtService.reIssueAccessToken(anyString());
+        JwtTokenRes jwtTokenRes = jwtService.reIssueAccessToken(anyString());
 
         // then
-        assertThat(refreshAccessToken).isEqualTo(accessToken);
+        assertThat(jwtTokenRes.accessToken()).isEqualTo(accessToken);
     }
 
     @Test
