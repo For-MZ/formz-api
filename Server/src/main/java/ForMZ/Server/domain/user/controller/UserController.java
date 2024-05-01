@@ -1,12 +1,14 @@
 package ForMZ.Server.domain.user.controller;
 
-import ForMZ.Server.domain.user.dto.LoginRes;
+import ForMZ.Server.domain.jwt.JwtTokenRes;
 import ForMZ.Server.domain.user.dto.MailReq;
 import ForMZ.Server.domain.user.dto.MailRes;
 import ForMZ.Server.domain.user.service.MailSenderService;
 import ForMZ.Server.domain.user.service.UserService;
 import ForMZ.Server.global.common.ResponseDto;
 import ForMZ.Server.domain.user.dto.UserReq;
+import ForMZ.Server.global.cookie.CookieUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import static ForMZ.Server.domain.user.constant.UserConstant.AuthResponseMessage
 @RequiredArgsConstructor
 public class UserController {
 
+    private final CookieUtil cookieUtil;
     private final UserService userService;
     private final MailSenderService mailSenderService;
 
@@ -52,8 +55,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginOAuth(@RequestParam("target") String target, @RequestParam("code") String code) {
-        LoginRes loginRes = userService.loginOAuth(target, code);
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), loginRes));
+    public ResponseEntity<?> loginOAuth(@RequestParam("target") String target, @RequestParam("code") String code, HttpServletResponse response) {
+        JwtTokenRes jwtTokenRes = userService.loginOAuth(target, code);
+        cookieUtil.setRefreshTokenInCookie(response, jwtTokenRes.refreshToken());
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage(), jwtTokenRes));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        cookieUtil.deleteRefreshTokenInCookie(response);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(HttpStatus.OK.value(), LOGIN_USER_SUCCESS.getMessage()));
     }
 }

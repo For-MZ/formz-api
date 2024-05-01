@@ -1,7 +1,7 @@
-package ForMZ.Server.global.jwt;
+package ForMZ.Server.domain.jwt;
 
-import ForMZ.Server.global.jwt.exception.JwtExpirationException;
-import ForMZ.Server.global.jwt.exception.JwtModulationException;
+import ForMZ.Server.domain.jwt.exception.JwtAccessExpirationException;
+import ForMZ.Server.domain.jwt.exception.JwtModulationException;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,7 +78,7 @@ public class JwtProviderTest {
         String accessToken = new JwtFactory(jwtProperty).createAccessToken(userId);
 
         // when
-        JwtExpirationException exception = assertThrows(JwtExpirationException.class, () -> jwtProvider.getUserId(accessToken));
+        JwtAccessExpirationException exception = assertThrows(JwtAccessExpirationException.class, () -> jwtProvider.getUserId(accessToken));
 
         // then
         assertThat(exception.getHttpStatus()).isEqualTo(HttpStatus.UNAUTHORIZED);

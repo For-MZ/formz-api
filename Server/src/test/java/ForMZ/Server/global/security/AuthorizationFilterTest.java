@@ -1,6 +1,6 @@
 package ForMZ.Server.global.security;
 
-import ForMZ.Server.global.jwt.JwtProvider;
+import ForMZ.Server.domain.jwt.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
