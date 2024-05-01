@@ -1,7 +1,8 @@
 package ForMZ.Server.domain.jwt;
 
-import ForMZ.Server.domain.jwt.exception.JwtExpirationException;
+import ForMZ.Server.domain.jwt.exception.JwtAccessExpirationException;
 import ForMZ.Server.domain.jwt.exception.JwtModulationException;
+import ForMZ.Server.domain.jwt.exception.JwtRefreshExpirationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,14 @@ public class JwtProvider {
     private final JwtProperty jwtProperty;
 
     public long getUserId(String token) {
-        return Long.parseLong(getClaims(token).getSubject());
+        return Long.parseLong(getClaims(token, false).getSubject());
     }
 
-    private Claims getClaims(String token) {
+    public void verifyRefreshToken(String token) {
+        getClaims(token, true);
+    }
+
+    private Claims getClaims(String token, boolean refresh) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(jwtProperty.getKey())
@@ -27,7 +32,7 @@ public class JwtProvider {
         } catch (SignatureException | MalformedJwtException | MissingClaimException ex) {
             throw new JwtModulationException();
         } catch (ExpiredJwtException ex) {
-            throw new JwtExpirationException();
+            throw refresh ? new JwtRefreshExpirationException() : new JwtAccessExpirationException();
         }
     }
 }

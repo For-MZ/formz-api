@@ -41,7 +41,7 @@ public class JwtRepositoryTest {
         // given
         String token = "리프레시 토큰";
         long userId = 1L;
-        jwtRepository.save(RefreshToken.toEntity(token, userId));
+        jwtRepository.save(RefreshToken.toEntity(token, userId, 5000));
 
         // when
         Optional<RefreshToken> optional = jwtRepository.findById(token);
@@ -49,7 +49,7 @@ public class JwtRepositoryTest {
         // then
         assertThat(optional).isNotEmpty();
         RefreshToken refreshToken = optional.get();
-        assertThat(refreshToken.getRefreshToken()).isEqualTo(token);
+        assertThat(refreshToken.getValue()).isEqualTo(token);
         assertThat(refreshToken.getUserId()).isEqualTo(userId);
     }
 
@@ -59,7 +59,7 @@ public class JwtRepositoryTest {
         // given
         String token = "리프레시 토큰";
         long userId = 1L;
-        RefreshToken refreshToken = jwtRepository.save(RefreshToken.toEntity(token, userId));
+        RefreshToken refreshToken = jwtRepository.save(RefreshToken.toEntity(token, userId, 5000));
 
         // when
         jwtRepository.delete(refreshToken);
@@ -67,5 +67,38 @@ public class JwtRepositoryTest {
 
         // then
         assertThat(optional).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Redis TTL 삭제 - 정상")
+    void ttlTest() throws InterruptedException {
+        // given
+        String token = "리프레시 토큰";
+        long userId = 1L;
+        jwtRepository.save(RefreshToken.toEntity(token, userId, 1000));
+
+        // when
+        Thread.sleep(1000);
+        Optional<RefreshToken> optional = jwtRepository.findById(token);
+
+        // then
+        assertThat(optional).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Secondary Index 탐색 시간 비교")
+    void findSecondaryIndexTimeCheck() {
+        // given
+        int last = 10;
+        for (int i = 0; i < last; i++) {
+            jwtRepository.save(RefreshToken.toEntity("refresh" + i, i, 100000));
+        }
+
+        // when, then
+        long start = System.nanoTime();
+        Optional<RefreshToken> optional = jwtRepository.findByUserId(last);
+        System.out.println("경과 시간 : " + ((System.nanoTime() - start) / 1_000_000) + "ms");
+        // Secondary Index (X) -> 1만건 : 27ms, 5만건 : 155ms
+        // Secondary Index (O) -> 1만건 : 24ms, 5만건 : 44ms
     }
 }
