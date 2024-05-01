@@ -41,18 +41,18 @@ public class JwtServiceTest {
         // given
         String accessToken = "엑세스 토큰";
         String refreshToken = "리프레시 토큰";
-        RefreshToken entity = RefreshToken.toEntity(refreshToken, 1L);
+        RefreshToken entity = RefreshToken.toEntity(refreshToken, 1L, 1000);
 
         doReturn(refreshToken).when(jwtFactory).createRefreshToken();
         doReturn(entity).when(jwtRepository).save(any());
         doReturn(accessToken).when(jwtFactory).createAccessToken(anyLong());
 
         // when
-        JwtToken jwtToken = jwtService.createJwtToken(1L);
+        JwtTokenRes jwtTokenRes = jwtService.createJwtToken(1L);
 
         // then
-        assertThat(jwtToken.accessToken()).isEqualTo(accessToken);
-        assertThat(jwtToken.refreshToken()).isEqualTo(refreshToken);
+        assertThat(jwtTokenRes.accessToken()).isEqualTo(accessToken);
+        assertThat(jwtTokenRes.refreshToken()).isEqualTo(refreshToken);
     }
     
     @Test
