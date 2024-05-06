@@ -1,0 +1,23 @@
+spring:
+  config:
+    import:
+      - classpath:/application-jwt.yml
+      - classpath:/application-oauth.yml
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL}
+    properties:
+      hibernate:
+        format_sql: false
+        show-sql: ${JPA_SHOW_SQL}
+
+redis:
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT}
