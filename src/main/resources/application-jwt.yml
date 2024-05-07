@@ -1,0 +1,8 @@
+jwt:
+  key: ${JWT_KEY}
+
+  access:
+    expiration: 1800000
+
+  refresh:
+    expiration: 1209600000
