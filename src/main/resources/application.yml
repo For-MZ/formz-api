@@ -1,0 +1,35 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo?serverTimezone=Asia/Seoul
+    username: root
+    password: 3174
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+    #        show_sql: true
+    #        format_sql: true
+    #        use_sql_comments: true
+    open-in-view: on
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+#decorator:
+#  datasource:
+#    # p6spy ?? ??
+#    p6spy:
+#      enable-logging: true
+#
+##      multiline: true
+##      logging: slf4j
+#
+jwt:
+  token:
+    secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
