@@ -8,6 +8,7 @@ class ForMZApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

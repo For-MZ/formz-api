@@ -10,4 +10,5 @@ public interface PostRepositoryCustom {
     List<Post> FindPost(String categoryName, List<String> words, Pageable pageable);
     Post FindPostById(Long id);
     List<Post> FindBestPost(Pageable pageable);
+    List<Post> getDuplicationHouse();
 }

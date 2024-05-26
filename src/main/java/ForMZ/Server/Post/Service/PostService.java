@@ -8,6 +8,7 @@ import ForMZ.Server.Post.Dto.PostDto;
 import ForMZ.Server.Post.Dto.ResChangePostDto;
 import ForMZ.Server.Post.Dto.ResPostDto;
 import ForMZ.Server.Post.Entity.Post;
+import ForMZ.Server.Post.Entity.Type;
 import ForMZ.Server.Post.Repository.PostRepository;
 import ForMZ.Server.User.Entity.User;
 import ForMZ.Server.User.Dto.UserDto;
@@ -51,7 +52,7 @@ public class PostService {
     public void SavePost(ResPostDto postDto) throws Exception {
         Optional<Category> category = categoryRepository.findByCategoryName(postDto.getCategoryName());
         if(category.isPresent()){
-            Post post = new Post(postDto.getTitle(),postDto.getContent(), postDto.getView_count(), postDto.getLike_count());
+            Post post = new Post(postDto.getTitle(),postDto.getContent(), postDto.getView_count(), postDto.getLike_count(), Type.posts);
             post.setCategories(category.get());
             postRepository.save(post);
         }
