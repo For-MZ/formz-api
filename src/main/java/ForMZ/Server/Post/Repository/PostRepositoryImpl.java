@@ -1,8 +1,8 @@
 package ForMZ.Server.Post.Repository;
 
-import ForMZ.Server.Comment.Entity.QComment;
 import ForMZ.Server.Core.Querydsl4RepositorySupport;
 import ForMZ.Server.Post.Entity.Post;
+import ForMZ.Server.Post.Entity.QHouse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import static ForMZ.Server.Category.Entity.QCategory.category;
 import static ForMZ.Server.Comment.Entity.QComment.comment;
+import static ForMZ.Server.Post.Entity.QHouse.house;
 import static ForMZ.Server.Post.Entity.QPost.post;
 import static ForMZ.Server.User.Entity.QUser.user;
 
@@ -23,10 +24,10 @@ import static ForMZ.Server.User.Entity.QUser.user;
 @Repository
 @Getter
 public class PostRepositoryImpl extends Querydsl4RepositorySupport implements PostRepositoryCustom {
-    private final JPAQueryFactory query;
+    private final JPAQueryFactory queryFactory;
     public PostRepositoryImpl(EntityManager em) {
         super(Post.class);
-        this.query = new JPAQueryFactory(em);
+        this.queryFactory = new JPAQueryFactory(em);
     }
 
 
@@ -66,4 +67,26 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
 
     //11,12,13,17,19,20,21,22,23,24,27,28,29
     //18,26,30,32~35
+
+    public List<Post> getDuplicationHouse() {
+        QHouse qHouse = house;
+
+        List<Long> maxIds = queryFactory
+                .select(qHouse.id.max())
+                .from(qHouse)
+                .groupBy(qHouse.hsmpSn, qHouse.insttNm, qHouse.brtcNm,
+                        qHouse.signguNm, qHouse.hsmpNm, qHouse.rnAdres,
+                        qHouse.competDe, qHouse.hshldCo, qHouse.suplyTyNm,
+                        qHouse.styleNm, qHouse.suplyPrvuseAr, qHouse.suplyCmnuseAr,
+                        qHouse.houseTyNm, qHouse.heatMthdDetailNm, qHouse.buldStleNm,
+                        qHouse.elvtrInstlAtNm, qHouse.parkngCo, qHouse.bassRentGtn,
+                        qHouse.bassMtRntchrg, qHouse.bassCnvrsGtnLmt)
+                .fetch();
+
+        return queryFactory
+                .selectFrom(post)
+                .join(post.house,house)
+                .where(house.id.in(maxIds))
+                .fetch();
+    }
 }
