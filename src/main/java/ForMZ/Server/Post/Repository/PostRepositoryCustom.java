@@ -11,4 +11,6 @@ public interface PostRepositoryCustom {
     Post FindPostById(Long id);
     List<Post> FindBestPost(Pageable pageable);
     List<Post> getDuplicationHouse();
+    List<Post> findAllById(List<Long> id);
+    List<Post> getAllHouse();
 }

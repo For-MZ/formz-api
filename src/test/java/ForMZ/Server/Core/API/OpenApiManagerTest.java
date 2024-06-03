@@ -60,7 +60,7 @@ OpenApiManagerTest {
 //        for(int i=0;i<2;i++){
 //            openApiManager.fetch("11","110");
 //        }
-        openApiManager.s();
+        openApiManager.DuplicationHouseDelete();
         LocalDateTime last = LocalDateTime.now();
         Duration diff = Duration.between(now, last);
         System.out.println(diff.toSeconds());
