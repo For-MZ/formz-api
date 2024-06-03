@@ -69,7 +69,7 @@ public class OpenApiManager {
             postRepository.saveAll(posts);
         }
     }
-    public void s(){
+    public void DuplicationHouseDelete(){
         List<Post> duplicationHouse = postRepository.getDuplicationHouse();
         postRepository.deleteAll(duplicationHouse);
     }

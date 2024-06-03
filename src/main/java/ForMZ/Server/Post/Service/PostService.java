@@ -2,6 +2,8 @@ package ForMZ.Server.Post.Service;
 
 import ForMZ.Server.BookMark.Entity.BookMark;
 import ForMZ.Server.BookMark.Entity.BookMarkPost;
+import ForMZ.Server.BookMark.Repository.BookMarkPostRepository;
+import ForMZ.Server.BookMark.Repository.BookMarkRepository;
 import ForMZ.Server.Category.Entity.Category;
 import ForMZ.Server.Category.Repository.CategoryRepository;
 import ForMZ.Server.Post.Dto.PostDto;
@@ -28,6 +30,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final BookMarkRepository bookMarkRepository;
+    private final BookMarkPostRepository bookMarPostRepository;
 
     public List<PostDto> findUserPost(Long userId){
         List<Post> posts = postRepository.findUserPost(userId);
@@ -77,16 +81,32 @@ public class PostService {
         postRepository.delete(post.get());
     }
 
-    private void BookMarkPost(Long postId,Long userId) throws Exception {
+    public void BookMarkPost(Long postId,Long userId) throws Exception {
         Optional<User> user = userRepository.UserWithBookMark(userId);
         if (user.isEmpty()) throw new Exception("존재하지않는 사용자입니다");
         Optional<Post> post = postRepository.findById(postId);
         if(post.isEmpty()) throw new Exception("존재하지않는 게시물입니다");
-        BookMarkPost bookMarkPost = new BookMarkPost(post.get(),user.get().getBookMarks().get(0));
+        BookMarkPost bookMarkPost = new BookMarkPost(post.get(),user.get().getBookMark());
+        bookMarPostRepository.save(bookMarkPost);
         //추후 북마크내의 타입을 지정해서 청년공간,청년정책,청년주택,게시글 로 나눔;
         //또한 게시물에도 타입을 지정
     }
     //26
+
+    public List<Long> UserBookMarkPostId(Long UserId){
+        BookMark bookMark = bookMarkRepository.UserBookMark(UserId);
+        List<Long> bookMarkPostId = bookMarkRepository.findBookMarkPostId(bookMark.getId());
+        List<Post> posts = postRepository.findAllById(bookMarkPostId);
+        return posts.stream().map(Post::getId).toList();
+    }
+    //13
+
+    public List<Long> UserBookMarkHouseId(Long UserId){
+        BookMark bookMark = bookMarkRepository.UserBookMark(UserId);
+        List<Long> bookMarkPostId = bookMarkRepository.findBookMarkHouseId(bookMark.getId());
+        List<Post> posts = postRepository.findAllById(bookMarkPostId);
+        return posts.stream().map(Post::getId).toList();
+    }
 
 
     private PostDto getPostDto(Post post) {
