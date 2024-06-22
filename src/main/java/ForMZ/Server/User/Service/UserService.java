@@ -4,6 +4,7 @@ import ForMZ.Server.BookMark.Repository.BookMarkRepository;
 import ForMZ.Server.Configuration.EncoderConfig;
 import ForMZ.Server.Core.JwtTokenUtil;
 import ForMZ.Server.Post.Entity.Post;
+import ForMZ.Server.User.Dto.ChangeProFileDto;
 import ForMZ.Server.User.Dto.UserDto;
 import ForMZ.Server.User.Dto.UserJoinDto;
 import ForMZ.Server.User.Entity.User;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
@@ -50,5 +52,34 @@ public class UserService {
         token.add(Access_token);
         token.add(reFresh_token);
         return token;
+    }
+
+    public void deleteUser(String accessToken) throws Exception {
+        String login_id = jwtTokenUtil.getclaims(accessToken).getSubject();
+        Optional<User> user = userRepository.findByUserId(login_id);
+        if(user.isEmpty()){
+            throw new Exception("존재하지않는 회원입니다.");
+        }
+        userRepository.delete(user.get());
+    }
+
+    public UserDto findUserProfile(String accessToken) throws Exception {
+        String login_id = jwtTokenUtil.getclaims(accessToken).getSubject();
+        Optional<User> user = userRepository.findByUserId(login_id);
+        if(user.isEmpty()){
+            throw new Exception("존재하지않는 회원입니다.");
+        }
+        User user1 = user.get();
+        return new UserDto(user1.getLoginId(),user1.getEmail(),user1.getNickname(),user1.getProfileImageUrl());
+    }
+    public UserDto ChangeUserProfile(String accessToken, ChangeProFileDto changeProFileDto) throws Exception {
+        String login_id = jwtTokenUtil.getclaims(accessToken).getSubject();
+        Optional<User> user = userRepository.findByUserId(login_id);
+        if(user.isEmpty()){
+            throw new Exception("존재하지않는 회원입니다.");
+        }
+        User user1 = user.get();
+        user1.changeProfile(changeProFileDto);
+        return new UserDto(user1.getLoginId(),user1.getEmail(),user1.getNickname(),user1.getProfileImageUrl());
     }
 }
