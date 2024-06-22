@@ -111,7 +111,7 @@ public class PostService {
 
     private PostDto getPostDto(Post post) {
         User postUser = post.getUser();
-        UserDto userDto = new UserDto(postUser.getId(), postUser.getEmail(), postUser.getNickname(), postUser.getProfileImageUrl());
+        UserDto userDto = new UserDto(postUser.getLoginId(), postUser.getEmail(), postUser.getNickname(), postUser.getProfileImageUrl());
         return new PostDto(post.getId(), post.getTitle(), userDto, post.getCategories().getCategoryName(), post.getCreatedDate(), post.getLastModifiedDate(),
                 post.getLike_count(), post.getView_count(), post.getCommentList().size());
     }
