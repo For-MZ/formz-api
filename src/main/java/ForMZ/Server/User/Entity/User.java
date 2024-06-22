@@ -82,14 +82,13 @@ public class User extends BaseEntity {
         this.profileImageUrl = changeProFile.getProfileImage();
     }
 
-    public User(String loginId, String password, String email, String nickname, String loginType, String profileImageUrl,BookMark bookMark) {
+    public User(String loginId, String password, String email, String nickname, String loginType, String profileImageUrl) {
         this.loginId = loginId;
         this.password = password;
         this.email = email;
         this.nickname = nickname;
         this.loginType = loginType;
         this.profileImageUrl = profileImageUrl;
-        this.bookMark = bookMark;
     }
 
     public void setUserSocialId(String socialId) {
