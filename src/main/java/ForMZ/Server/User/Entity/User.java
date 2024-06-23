@@ -33,7 +33,6 @@ public class User extends BaseEntity {
     private String loginId;
 
     @NotNull
-    @Size(max = 50)
     private String password;
 
     @NotNull
@@ -55,8 +54,8 @@ public class User extends BaseEntity {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-    @NotNull
-    private Boolean withdraw;
+//    @NotNull
+//    private Boolean withdraw;
 
     @Column(name = "withdraw_time")
     @CreationTimestamp private LocalDateTime withdrawTime;
