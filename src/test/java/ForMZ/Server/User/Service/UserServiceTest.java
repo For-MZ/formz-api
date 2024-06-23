@@ -1,5 +1,7 @@
 package ForMZ.Server.User.Service;
 
+import ForMZ.Server.User.Dto.ChangeProFileDto;
+import ForMZ.Server.User.Dto.UserDto;
 import ForMZ.Server.User.Dto.UserJoinDto;
 import ForMZ.Server.User.Entity.User;
 import ForMZ.Server.User.Repository.UserRepository;
@@ -97,6 +99,60 @@ public class UserServiceTest {
         try {
             List<String> login = userService.login("id", "fjfkle352");
             userService.deleteUser(login.get(0));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    public void userProfile_error_test(){
+        UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
+        userService.join(userJoinDto);
+        try {
+            List<String> login = userService.login("id", "fjfkle352");
+            userService.deleteUser(login.get(0));
+            userService.findUserProfile(login.get(0));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void userProfile_normal_test(){
+        UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
+        userService.join(userJoinDto);
+        try {
+            List<String> login = userService.login("id", "fjfkle352");
+            System.out.println(userService.findUserProfile(login.get(0)));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void changeProfile_error_test(){
+        UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
+        ChangeProFileDto changeProFileDto = new ChangeProFileDto("id2","fjfkle352","www@www.com","user");
+        userService.join(userJoinDto);
+        try {
+            List<String> login = userService.login("id", "fjfkle352");
+            userService.deleteUser(login.get(0));
+            userService.ChangeUserProfile(login.get(0),changeProFileDto);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void changeProfile_normal_test(){
+        UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
+        ChangeProFileDto changeProFileDto = new ChangeProFileDto("id2","fjfkle352","www@www.com","user");
+        userService.join(userJoinDto);
+        try {
+            List<String> login = userService.login("id", "fjfkle352");
+            UserDto userDto = userService.ChangeUserProfile(login.get(0), changeProFileDto);
+            System.out.println(userDto);
+            em.flush();
+            em.clear();
+            User id2 = userRepository.findByUserId("id").get();
+            return;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
