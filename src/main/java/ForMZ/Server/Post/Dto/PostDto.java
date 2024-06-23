@@ -1,6 +1,8 @@
 package ForMZ.Server.Post.Dto;
 
 import ForMZ.Server.User.Dto.UserDto;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -19,4 +21,5 @@ public class PostDto {
     int likeCnt;
     int views;
     int commentCnt;
+
 }

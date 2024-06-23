@@ -33,7 +33,6 @@ public class User extends BaseEntity {
     private String loginId;
 
     @NotNull
-    @Size(max = 50)
     private String password;
 
     @NotNull
@@ -55,8 +54,8 @@ public class User extends BaseEntity {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-    @NotNull
-    private Boolean withdraw;
+//    @NotNull
+//    private Boolean withdraw;
 
     @Column(name = "withdraw_time")
     @CreationTimestamp private LocalDateTime withdrawTime;
@@ -65,8 +64,9 @@ public class User extends BaseEntity {
     private List<SearchHistory> searchHistories = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<BookMark> bookMarks = new ArrayList<>() ;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_mark_id")
+    private BookMark bookMark;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
@@ -79,5 +79,18 @@ public class User extends BaseEntity {
         this.nickname = changeProFile.getNickName();
         this.password = changeProFile.getPassword();
         this.profileImageUrl = changeProFile.getProfileImage();
+    }
+
+    public User(String loginId, String password, String email, String nickname, String loginType, String profileImageUrl) {
+        this.loginId = loginId;
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
+        this.loginType = loginType;
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public void setUserSocialId(String socialId) {
+        this.socialId = socialId;
     }
 }

@@ -21,11 +21,15 @@ public class UserRepositoryImpl extends Querydsl4RepositorySupport implements Us
         super(User.class);
         this.query = new JPAQueryFactory(em);
     }
+    @Override
+    public Optional<User> findByUserId(String id) {
+        return Optional.ofNullable(selectFrom(user).where(user.loginId.eq(id)).fetchOne());
+    }
 
     //17번
     public Optional<User> UserWithBookMark(Long id){
         return Optional.ofNullable(
-                selectFrom(user).join(user.bookMarks, bookMark).fetchJoin().join(bookMark).where(user.id.eq(id)).fetchOne()
+                selectFrom(user).join(user.bookMark, bookMark).fetchJoin().join(bookMark).where(user.id.eq(id)).fetchOne()
         );
     }
     //13

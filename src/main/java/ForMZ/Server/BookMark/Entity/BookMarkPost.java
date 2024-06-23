@@ -19,7 +19,7 @@ public class BookMarkPost {
     @JoinColumn(name = "post_id")
     private Post posts;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_mark_id")
     private BookMark bookMarks;
 

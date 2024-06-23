@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface UserRepositoryCustom {
 
-
+    Optional<User> findByUserId(String id);
     Optional<User> UserWithBookMark(Long id);
 }

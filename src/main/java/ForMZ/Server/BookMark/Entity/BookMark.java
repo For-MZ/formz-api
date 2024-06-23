@@ -18,16 +18,10 @@ public class BookMark {
     @Column(name = "book_mark_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "bookMark")
     private User user;
 
-    @OneToMany(mappedBy = "bookMarks")
-    private List<BookMarkPost> bookMarkPostList = new ArrayList<>();
-
-    public void changeUser(User user){
-        this.user = user;
-        user.getBookMarks().add(this);
-    }
+    @OneToOne(mappedBy = "bookMarks")
+    private BookMarkPost bookMarkPost;
 
 }

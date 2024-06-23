@@ -1,4 +1,4 @@
-package ForMZ.Server.Core.API;
+package ForMZ.Server.Post.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,10 +9,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Housing {
+public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "housing_id")
+    @Column(name = "house_id")
     private Long id;
 
     private String hsmpSn;
@@ -36,10 +36,9 @@ public class Housing {
     private String bassMtRntchrg;
     private String bassCnvrsGtnLmt;
 
-    public Housing() {
+    public House() {
     }
-
-    public Housing(String hsmpSn, String insttNm, String brtcNm, String signguNm, String hsmpNm, String rnAdres, String competDe, String hshldCo, String suplyTyNm, String styleNm, String suplyPrvuseAr, String suplyCmnuseAr, String houseTyNm, String heatMthdDetailNm, String buldStleNm, String elvtrInstlAtNm, String parkngCo, String bassRentGtn, String bassMtRntchrg, String bassCnvrsGtnLmt) {
+    public House(String hsmpSn, String insttNm, String brtcNm, String signguNm, String hsmpNm, String rnAdres, String competDe, String hshldCo, String suplyTyNm, String styleNm, String suplyPrvuseAr, String suplyCmnuseAr, String houseTyNm, String heatMthdDetailNm, String buldStleNm, String elvtrInstlAtNm, String parkngCo, String bassRentGtn, String bassMtRntchrg, String bassCnvrsGtnLmt) {
         this.hsmpSn = hsmpSn;
         this.insttNm = insttNm;
         this.brtcNm = brtcNm;
