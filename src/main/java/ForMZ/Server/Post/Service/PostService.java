@@ -10,7 +10,7 @@ import ForMZ.Server.Post.Dto.PostDto;
 import ForMZ.Server.Post.Dto.ResChangePostDto;
 import ForMZ.Server.Post.Dto.ResPostDto;
 import ForMZ.Server.Post.Entity.Post;
-import ForMZ.Server.Post.Entity.Type;
+import ForMZ.Server.Post.Entity.PostType;
 import ForMZ.Server.Post.Repository.PostRepository;
 import ForMZ.Server.User.Entity.User;
 import ForMZ.Server.User.Dto.UserDto;
@@ -56,7 +56,7 @@ public class PostService {
     public void SavePost(ResPostDto postDto) throws Exception {
         Optional<Category> category = categoryRepository.findByCategoryName(postDto.getCategoryName());
         if(category.isPresent()){
-            Post post = new Post(postDto.getTitle(),postDto.getContent(), postDto.getView_count(), postDto.getLike_count(), Type.posts);
+            Post post = new Post(postDto.getTitle(),postDto.getContent(), postDto.getView_count(), postDto.getLike_count(), PostType.posts);
             post.setCategories(category.get());
             postRepository.save(post);
         }
@@ -107,6 +107,9 @@ public class PostService {
         List<Post> posts = postRepository.findAllById(bookMarkPostId);
         return posts.stream().map(Post::getId).toList();
     }
+    public void saveAll(List<Post> posts){
+        postRepository.saveAll(posts);
+    }
 
 
     private PostDto getPostDto(Post post) {
@@ -115,5 +118,7 @@ public class PostService {
         return new PostDto(post.getId(), post.getTitle(), userDto, post.getCategories().getCategoryName(), post.getCreatedDate(), post.getLastModifiedDate(),
                 post.getLike_count(), post.getView_count(), post.getCommentList().size());
     }
+
+
 
 }

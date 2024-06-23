@@ -50,6 +50,8 @@ public class Comment extends BaseEntity {
         this.like_count = 0;
         this.user = user;
         this.post = post;
+        user.getComments().add(this);
+        post.getCommentList().add(this);
     }
 
     public void ChangeContent(String content) {
