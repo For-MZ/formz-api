@@ -16,8 +16,7 @@ import java.util.*;
 
 @SpringBootTest
 @Transactional
-class
-OpenApiManagerTest {
+class OpenApiManagerTest {
     @Autowired OpenApiManager openApiManager;
     @Test
     @Rollback(value = false)

@@ -44,7 +44,7 @@ public class UserService {
     public List<String> login(String id, String password) throws Exception {
         User user = userRepository.findByUserId(id).orElseThrow(() -> new Exception("존재하지 않는 id입니다."));
         if(!encoder.matches(password,user.getPassword())){ //matchs왼쪽이 암호화 안된것 , 오른쪽이 암호화 된것
-            throw new Exception(user.getPassword()+"비밀번호가 틀렷습니다");
+            throw new Exception("비밀번호가 틀렷습니다");
         }
         String Access_token = jwtTokenUtil.createToken(user.getLoginId(),expireTimeMs);
         String reFresh_token = jwtTokenUtil.createReFreshToken(user.getLoginId(),expireTimeMs);
