@@ -80,6 +80,7 @@ public class UserService {
         }
         User user1 = user.get();
         user1.changeProfile(changeProFileDto);
+        userRepository.save(user1);
         return new UserDto(user1.getLoginId(),user1.getEmail(),user1.getNickname(),user1.getProfileImageUrl());
     }
 }
