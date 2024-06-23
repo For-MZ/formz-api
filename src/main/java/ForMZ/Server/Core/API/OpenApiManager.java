@@ -3,7 +3,7 @@ package ForMZ.Server.Core.API;
 
 import ForMZ.Server.Post.Entity.House;
 import ForMZ.Server.Post.Entity.Post;
-import ForMZ.Server.Post.Entity.Type;
+import ForMZ.Server.Post.Entity.PostType;
 import ForMZ.Server.Post.Repository.HouseRepository;
 import ForMZ.Server.Post.Repository.PostRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -61,7 +60,7 @@ public class OpenApiManager {
                 housing.setBassMtRntchrg(hsmpList.get(i).get("bassMtRntchrg").asText());
                 housing.setBassCnvrsGtnLmt(hsmpList.get(i).get("bassCnvrsGtnLmt").asText());
                 housings.add(housing);
-                Post post = new Post(housing.getInsttNm(),housing.getHsmpSn(),0,0, Type.house);
+                Post post = new Post(housing.getInsttNm(),housing.getHsmpSn(),0,0, PostType.house);
                 post.setHouse(housing);
                 posts.add(post);
             }

@@ -10,7 +10,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class Post extends BaseEntity {
     private House house;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private PostType type;
     public void setUser(User user){
         this.user = user;
         user.getPostList().add(this);
@@ -66,7 +65,7 @@ public class Post extends BaseEntity {
         categories.getPostsList().add(this);
     }
 
-    public Post(String title, String text, int view_count, int like_count,Type type) {
+    public Post(String title, String text, int view_count, int like_count, PostType type) {
         this.title = title;
         this.content = text;
         this.view_count = view_count;

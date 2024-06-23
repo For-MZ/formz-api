@@ -1,6 +1,5 @@
 package ForMZ.Server.BookMark.Entity;
 
-import ForMZ.Server.Post.Entity.Type;
 import ForMZ.Server.User.Entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,7 +21,7 @@ public class BookMark {
     @OneToOne(mappedBy = "bookMark")
     private User user;
 
-    @OneToMany(mappedBy = "bookMarks")
-    private List<BookMarkPost> bookMarkPostList = new ArrayList<>();
+    @OneToOne(mappedBy = "bookMarks")
+    private BookMarkPost bookMarkPost;
 
 }

@@ -2,8 +2,8 @@ package ForMZ.Server.Post.Repository;
 
 import ForMZ.Server.Core.Querydsl4RepositorySupport;
 import ForMZ.Server.Post.Entity.Post;
+import ForMZ.Server.Post.Entity.PostType;
 import ForMZ.Server.Post.Entity.QHouse;
-import ForMZ.Server.Post.Entity.Type;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -38,7 +38,7 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
             booleanBuilder.and(post.title.like("%" + word + "%"));
         }
         return selectFrom(post).join(post.categories, category).fetchJoin().join(post.user, user).fetchJoin()
-                .where(NameEq(categoryName),booleanBuilder,post.type.eq(Type.posts)).orderBy(post.createdDate.desc()).offset(pageable.getOffset())
+                .where(NameEq(categoryName),booleanBuilder,post.type.eq(PostType.posts)).orderBy(post.createdDate.desc()).offset(pageable.getOffset())
                 .limit(pageable.getPageSize()).fetch();
     }
     //20
@@ -51,14 +51,14 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
 
     public List<Post> FindBestPost(Pageable pageable){
         return selectFrom(post).join(post.categories, category).fetchJoin().join(post.user, user).fetchJoin()
-                .where(post.type.eq(Type.posts))
+                .where(post.type.eq(PostType.posts))
                 .orderBy(post.view_count.desc(), post.like_count.desc()).limit(pageable.getPageSize()).fetch();
     }
     //24
 
 
     public List<Post> findUserPost(Long userId){
-        return selectFrom(post).join(post.user, user).fetchJoin().join(post.commentList, comment).join(post.categories, category).fetchJoin().where(user.id.eq(userId),post.type.eq(Type.posts)).fetch();
+        return selectFrom(post).join(post.user, user).fetchJoin().leftJoin(post.commentList, comment).fetchJoin().leftJoin(post.categories, category).fetchJoin().where(user.id.eq(userId),post.type.eq(PostType.posts)).fetch();
     }
 
     public List<Post> findAllById(List<Long> id){
@@ -94,6 +94,6 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
     }
 
     public List<Post> getAllHouse(){
-        return selectFrom(post).where(post.type.eq(Type.house)).join(post.house,house).fetchJoin().fetch();
+        return selectFrom(post).where(post.type.eq(PostType.house)).join(post.house,house).fetchJoin().fetch();
     }
 }
