@@ -52,8 +52,8 @@ public class PostService {
         return getPostDetailDto(post.orElse(null));
     }
 
-    public List<PostDto> BestPost(Pageable pageable){
-        List<Post> posts = postRepository.FindBestPost(pageable);
+    public List<PostDto> BestPost(int PageSize){
+        List<Post> posts = postRepository.FindBestPost(PageSize);
         return posts.stream().map(this::getPostDto).toList();
     }
 

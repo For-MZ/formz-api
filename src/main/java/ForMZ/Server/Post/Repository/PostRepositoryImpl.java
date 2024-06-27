@@ -53,10 +53,10 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
     }
     //21
 
-    public List<Post> FindBestPost(Pageable pageable){
+    public List<Post> FindBestPost(int PageSize){
         return selectFrom(post).join(post.categories, category).fetchJoin().join(post.user, user).fetchJoin()
                 .where(post.type.eq(PostType.posts))
-                .orderBy(post.view_count.desc(), post.like_count.desc()).limit(pageable.getPageSize()).fetch();
+                .orderBy(post.view_count.desc(), post.like_count.desc()).limit(PageSize).fetch();
     }
     //24
 

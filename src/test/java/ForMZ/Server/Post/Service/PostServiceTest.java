@@ -238,4 +238,84 @@ class PostServiceTest {
             System.out.println(e.getMessage());
         }
     }
+    @Test
+    public void delete_post_error() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        userService.join(userJoinDto);
+        User id = userService.findByUserId("id").get();
+        BookMark bookMark = new BookMark();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 10; i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        em.flush();
+        em.clear();
+        try {
+            postService.deletePost(11L);
+            System.out.println("성공");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void delete_post_normal() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        userService.join(userJoinDto);
+        User id = userService.findByUserId("id").get();
+        BookMark bookMark = new BookMark();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 10; i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        em.flush();
+        em.clear();
+        try {
+            postService.deletePost(7L);
+            System.out.println("성공");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void best_post_normal() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        userService.join(userJoinDto);
+        User id = userService.findByUserId("id").get();
+        BookMark bookMark = new BookMark();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 20; i++) {
+            Post post = new Post("1", "test1", 100-i, 100-i, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        em.flush();
+        em.clear();
+        try {
+            List<PostDto> postDtos = postService.BestPost(10);
+            for (PostDto postDto : postDtos) {
+                System.out.println(postDto);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 }

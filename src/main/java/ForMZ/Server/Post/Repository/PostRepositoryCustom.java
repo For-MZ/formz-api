@@ -11,7 +11,7 @@ public interface PostRepositoryCustom {
     List<Post> findUserPost(Long userId);
     List<Post> FindPost(String categoryName, List<String> words, final int startPage, final int pageSize);
     Optional<Post> FindPostById(Long id);
-    List<Post> FindBestPost(Pageable pageable);
+    List<Post> FindBestPost(int PageSize );
     List<Post> getDuplicationHouse();
     List<Post> findAllById(List<Long> id);
     List<Post> getAllHouse();
