@@ -24,6 +24,10 @@ public class SearchHistory {
     @NotNull
     private String word;
 
+    public SearchHistory(String word) {
+        this.word = word;
+    }
+
     public void setUser(User user){
         this.user = user;
         user.getSearchHistories().add(this);
