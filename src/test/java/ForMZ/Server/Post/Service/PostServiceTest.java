@@ -85,8 +85,9 @@ class PostServiceTest {
             bookMarkPostList.add(bookMarkPost);
             posts.add(post);
         }
-        bookMarkPostRepository.saveAll(bookMarkPostList);
         postService.saveAll(posts);
+        bookMarkPostRepository.saveAll(bookMarkPostList);
+
         em.flush();
         em.clear();
         BookMark bookMark1 = id.getBookMark();
