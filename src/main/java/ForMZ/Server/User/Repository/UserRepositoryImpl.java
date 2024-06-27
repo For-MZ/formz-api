@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 import static ForMZ.Server.BookMark.Entity.QBookMark.bookMark;
+import static ForMZ.Server.BookMark.Entity.QBookMarkPost.bookMarkPost;
+import static ForMZ.Server.Post.Entity.QPost.post;
 import static ForMZ.Server.User.Entity.QUser.user;
 
 
@@ -29,7 +31,8 @@ public class UserRepositoryImpl extends Querydsl4RepositorySupport implements Us
     //17번
     public Optional<User> UserWithBookMark(Long id){
         return Optional.ofNullable(
-                selectFrom(user).join(user.bookMark, bookMark).fetchJoin().join(bookMark).where(user.id.eq(id)).fetchOne()
+                selectFrom(user).join(user.bookMark, bookMark).join(bookMark.bookMarkPostList,bookMarkPost)
+                        .join(bookMarkPost.posts,post).fetchJoin().where(user.id.eq(id)).fetchOne()
         );
     }
     //13

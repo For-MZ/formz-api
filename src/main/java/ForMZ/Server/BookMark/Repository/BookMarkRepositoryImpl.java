@@ -27,14 +27,14 @@ public class BookMarkRepositoryImpl extends Querydsl4RepositorySupport implement
     }
 
     public List<Long> findBookMarkPostId(Long BookMarkId){
-        return select(post.id).from(bookMark).join(bookMark.bookMarkPost,bookMarkPost).join(bookMarkPost.posts,post).fetchJoin().
+        return select(post.id).from(bookMark).join(bookMark.bookMarkPostList,bookMarkPost).join(bookMarkPost.posts,post).fetchJoin().
                 where(bookMark.id.eq(BookMarkId),post.type.eq(PostType.posts)
         ).fetch();
     }
     //추후 post로할지 아니면 post와 연관된 user도 함께 가져올지 설정
 
     public List<Long> findBookMarkHouseId(Long BookMarkId){
-        return select(post.id).from(bookMark).join(bookMark.bookMarkPost,bookMarkPost).join(bookMarkPost.posts,post).fetchJoin().where(
+        return select(post.id).from(bookMark).join(bookMark.bookMarkPostList,bookMarkPost).join(bookMarkPost.posts,post).fetchJoin().where(
                 bookMark.id.eq(BookMarkId),post.type.eq(PostType.house)
                 //,TypeEq(?) //추후 post에 종류가 붙는다면 동적쿼리로 어떤 종류의 개시물을 가져올지 정함
         ).fetch();
