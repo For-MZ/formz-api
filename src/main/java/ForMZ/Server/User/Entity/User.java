@@ -80,6 +80,10 @@ public class User extends BaseEntity {
         this.password = changeProFile.getPassword();
         this.profileImageUrl = changeProFile.getProfileImage();
     }
+    public void settingBookMark(BookMark bookMark){
+        this.bookMark = bookMark;
+        bookMark.settingUser(this);
+    }
 
     public User(String loginId, String password, String email, String nickname, String loginType, String profileImageUrl) {
         this.loginId = loginId;

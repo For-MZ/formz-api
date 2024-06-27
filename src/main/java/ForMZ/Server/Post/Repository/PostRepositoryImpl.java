@@ -1,5 +1,6 @@
 package ForMZ.Server.Post.Repository;
 
+import ForMZ.Server.BookMark.Entity.BookMarkPost;
 import ForMZ.Server.Core.Querydsl4RepositorySupport;
 import ForMZ.Server.Post.Entity.Post;
 import ForMZ.Server.Post.Entity.PostType;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static ForMZ.Server.BookMark.Entity.QBookMark.bookMark;
+import static ForMZ.Server.BookMark.Entity.QBookMarkPost.bookMarkPost;
 import static ForMZ.Server.Category.Entity.QCategory.category;
 import static ForMZ.Server.Comment.Entity.QComment.comment;
 import static ForMZ.Server.Post.Entity.QHouse.house;
@@ -60,11 +63,17 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
     public List<Post> findUserPost(Long userId){
         return selectFrom(post).join(post.user, user).fetchJoin().leftJoin(post.commentList, comment).fetchJoin().leftJoin(post.categories, category).fetchJoin().where(user.id.eq(userId),post.type.eq(PostType.posts)).fetch();
     }
+    public List<BookMarkPost> BookMarkPostList(Long bookMarkId){
+        return select(bookMarkPost).from(bookMark).join(bookMark.bookMarkPostList,bookMarkPost).fetch();
+    }
 
     public List<Post> findAllById(List<Long> id){
         return selectFrom(post).where(post.id.in(id)).fetch();
     }
 
+    public List<Post> BookMark_Post(List<Long> bookMarkPostId){
+        return select(post).from(bookMarkPost).join(bookMarkPost.posts,post).where(bookMarkPost.id.in(bookMarkPostId)).fetch();
+    }
     private BooleanExpression NameEq(String name) {
         return name!=null ? category.categoryName.eq(name) : null;
     }

@@ -1,5 +1,6 @@
 package ForMZ.Server.Post.Repository;
 
+import ForMZ.Server.BookMark.Entity.BookMarkPost;
 import ForMZ.Server.Post.Entity.Post;
 import org.springframework.data.domain.Pageable;
 
@@ -13,4 +14,6 @@ public interface PostRepositoryCustom {
     List<Post> getDuplicationHouse();
     List<Post> findAllById(List<Long> id);
     List<Post> getAllHouse();
+    List<BookMarkPost> BookMarkPostList(Long bookMarkId);
+    List<Post> BookMark_Post(List<Long> bookMarkPostId);
 }

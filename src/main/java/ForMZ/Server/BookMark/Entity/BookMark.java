@@ -21,7 +21,9 @@ public class BookMark {
     @OneToOne(mappedBy = "bookMark")
     private User user;
 
-    @OneToOne(mappedBy = "bookMarks")
-    private BookMarkPost bookMarkPost;
-
+    @OneToMany(mappedBy = "bookMarks")
+    private List<BookMarkPost> bookMarkPostList = new ArrayList<>();
+    public void settingUser(User user){
+        this.user = user;
+    }
 }
