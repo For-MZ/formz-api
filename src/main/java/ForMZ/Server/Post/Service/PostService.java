@@ -6,6 +6,7 @@ import ForMZ.Server.BookMark.Repository.BookMarkPostRepository;
 import ForMZ.Server.BookMark.Repository.BookMarkRepository;
 import ForMZ.Server.Category.Entity.Category;
 import ForMZ.Server.Category.Repository.CategoryRepository;
+import ForMZ.Server.Post.Dto.PostDetailDto;
 import ForMZ.Server.Post.Dto.PostDto;
 import ForMZ.Server.Post.Dto.ResChangePostDto;
 import ForMZ.Server.Post.Dto.ResPostDto;
@@ -38,14 +39,17 @@ public class PostService {
         return posts.stream().map(this::getPostDto).toList();
     }
     //11번
-    public List<PostDto> findPosts(@Nullable String category_name, List<String> words, Pageable pageable){
-        List<Post> posts = postRepository.FindPost(category_name, words, pageable);
+    public List<PostDto> findPosts(@Nullable String category_name, List<String> words,final int startPage, final int PageSize){
+        List<Post> posts = postRepository.FindPost(category_name, words, startPage,PageSize);
         return posts.stream().map(this::getPostDto).toList();
     }
     //20번
-    public PostDto findPost(Long postId){
-        Post post = postRepository.FindPostById(postId);
-        return getPostDto(post);
+    public PostDetailDto findPost(Long postId) throws Exception {
+        Optional<Post> post = postRepository.FindPostById(postId);
+        if(post.isEmpty()){
+            throw new Exception("존재하지 않는 게시물입니다");
+        }
+        return getPostDetailDto(post.orElse(null));
     }
 
     public List<PostDto> BestPost(Pageable pageable){
@@ -124,6 +128,11 @@ public class PostService {
                 post.getLike_count(), post.getView_count(), post.getCommentList().size());
     }
 
-
+    private PostDetailDto getPostDetailDto(Post post) {
+        User postUser = post.getUser();
+        UserDto userDto = new UserDto(postUser.getLoginId(), postUser.getEmail(), postUser.getNickname(), postUser.getProfileImageUrl());
+        return new PostDetailDto(post.getId(), post.getTitle(),post.getContent(), userDto, post.getCategories().getCategoryName(), post.getCreatedDate(), post.getLastModifiedDate(),
+                post.getLike_count(), post.getView_count(), post.getCommentList().size());
+    }
 
 }

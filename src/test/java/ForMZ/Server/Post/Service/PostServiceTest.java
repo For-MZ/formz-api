@@ -9,7 +9,9 @@ import ForMZ.Server.BookMark.Service.BookMarkService;
 import ForMZ.Server.Category.Service.CategoryService;
 import ForMZ.Server.Category.Entity.Category;
 import ForMZ.Server.Category.Repository.CategoryRepository;
+import ForMZ.Server.Post.Dto.PostDetailDto;
 import ForMZ.Server.Post.Dto.PostDto;
+import ForMZ.Server.Post.Dto.ResChangePostDto;
 import ForMZ.Server.Post.Entity.Post;
 import ForMZ.Server.Post.Entity.PostType;
 import ForMZ.Server.Post.Repository.PostRepository;
@@ -21,10 +23,16 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction.*;
 
 @SpringBootTest
 @Transactional
@@ -96,6 +104,138 @@ class PostServiceTest {
         List<PostDto> posts1 = postService.bookMark_Post(d);
         for (PostDto post : posts1) {
             System.out.println(post.toString());
+        }
+    }
+    @Test
+    public void find_posts(){
+        UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
+        userService.join(userJoinDto);
+        User id = userService.findByUserId("id").get();
+        BookMark bookMark = new BookMark();
+        List<Post> posts= new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for(int i=0;i<10;i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        em.flush();
+        em.clear();
+        List<String> find_word = new ArrayList<>();
+        List<PostDto> posts1 = postService.findPosts("비션", find_word, 0, 10);
+        for (PostDto postDto : posts1) {
+            System.out.println(postDto);
+        }
+    }
+    @Test
+    public void find_post_error() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        userService.join(userJoinDto);
+        User id = userService.findByUserId("id").get();
+        BookMark bookMark = new BookMark();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 10; i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        em.flush();
+        em.clear();
+        try{
+            PostDetailDto post = postService.findPost(11L);
+            System.out.println(post);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void find_post_normal() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        userService.join(userJoinDto);
+        User id = userService.findByUserId("id").get();
+        BookMark bookMark = new BookMark();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 10; i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        em.flush();
+        em.clear();
+        try{
+            PostDetailDto post = postService.findPost(8L);
+            System.out.println(post);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void change_post_error() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        userService.join(userJoinDto);
+        User id = userService.findByUserId("id").get();
+        BookMark bookMark = new BookMark();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 10; i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        em.flush();
+        em.clear();
+        //ResChangePostDto changePostDto = new ResChangePostDto("k","kk","임시2");//카테고리 에러
+        ResChangePostDto changePostDto = new ResChangePostDto("k","kk","임시");
+        //Post post = posts.get(0);
+        try {
+            postService.ChangePost(changePostDto, 11L);//게시물 미존재 에러
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void change_post_normal() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        userService.join(userJoinDto);
+        User id = userService.findByUserId("id").get();
+        BookMark bookMark = new BookMark();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 10; i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        em.flush();
+        em.clear();
+        ResChangePostDto changePostDto = new ResChangePostDto("k","kk","임시");
+        Post post = posts.get(0);
+        try {
+            postService.ChangePost(changePostDto, post.getId());//게시물 미존재 에러
+            System.out.println("성공");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }

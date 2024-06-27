@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static ForMZ.Server.BookMark.Entity.QBookMark.bookMark;
 import static ForMZ.Server.BookMark.Entity.QBookMarkPost.bookMarkPost;
@@ -35,20 +36,20 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
     }
 
 
-    public List<Post> FindPost(@Nullable String categoryName, List<String> words, Pageable pageable){
+    public List<Post> FindPost(@Nullable String categoryName, List<String> words, final int startPage,final int PageSize){
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         for (String word : words) {
             booleanBuilder.and(post.title.like("%" + word + "%"));
         }
         return selectFrom(post).join(post.categories, category).fetchJoin().join(post.user, user).fetchJoin()
-                .where(NameEq(categoryName),booleanBuilder,post.type.eq(PostType.posts)).orderBy(post.createdDate.desc()).offset(pageable.getOffset())
-                .limit(pageable.getPageSize()).fetch();
+                .where(NameEq(categoryName),booleanBuilder,post.type.eq(PostType.posts)).orderBy(post.createdDate.desc()).offset(startPage)
+                .limit(PageSize).fetch();
     }
     //20
 
-    public Post FindPostById(Long id){
-        return selectFrom(post).join(post.categories, category).fetchJoin().join(post.user, user).fetchJoin()
-                .where(post.id.eq(id)).fetchOne();
+    public Optional<Post> FindPostById(Long id){
+        return Optional.ofNullable(selectFrom(post).join(post.categories, category).fetchJoin().join(post.user, user).fetchJoin()
+                .where(post.id.eq(id)).fetchOne());
     }
     //21
 
