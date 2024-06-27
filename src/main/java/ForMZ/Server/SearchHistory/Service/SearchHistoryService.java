@@ -15,16 +15,20 @@ import java.util.Optional;
 public class SearchHistoryService {
     private final SearchHistoryRepository searchHistoryRepository;
 
-    public List<searchHistoryDto> FindUserSearchHistory(Long userId){
+    public List<searchHistoryDto> FindUserSearchHistory(Long userId) throws Exception {
         List<SearchHistory> searchHistories = searchHistoryRepository.UserSearchHistory(userId);
+        if(searchHistories.isEmpty()) throw new Exception("검색기록이 존재하지 않습니다");
         return searchHistories.stream().map(s->{
             return new searchHistoryDto(s.getId(),s.getWord());
         }).toList();
     }
-    public void DeleteSearchHistory(Long searchWordId) throws Exception {
-        Optional<SearchHistory> searchHistory = searchHistoryRepository.findById(searchWordId);
-        if(searchHistory.isEmpty()) throw new Exception("존재하지않는 댓글입나다");
-        searchHistoryRepository.delete(searchHistory.get());
+    public void DeleteSearchHistory(Long UserId) throws Exception {
+        List<SearchHistory> searchHistory = searchHistoryRepository.UserSearchHistory(UserId);
+        if(searchHistory.isEmpty()) throw new Exception("검색기록이 존재하지 않습니다");
+        searchHistoryRepository.deleteAll(searchHistory);
+    }
+    public void save(SearchHistory searchHistory){
+        searchHistoryRepository.save(searchHistory);
     }
 }
 

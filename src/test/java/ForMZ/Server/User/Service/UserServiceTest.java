@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class UserServiceTest {
     @Autowired UserService userService;
-    @Autowired
-    UserRepository userRepository;
     @Autowired EntityManager em;
     @Test
     public void join_duplication_test(){
@@ -43,7 +41,7 @@ public class UserServiceTest {
         UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
         userService.join(userJoinDto);
         em.clear();
-        Optional<User> byUserId = userRepository.findByUserId(userJoinDto.getLoginId());
+        Optional<User> byUserId = userService.findByUserId(userJoinDto.getLoginId());
         Assert.assertEquals(byUserId.get().getLoginId(),"id");
     }
 
@@ -85,8 +83,8 @@ public class UserServiceTest {
         userService.join(userJoinDto);
         try {
             List<String> login = userService.login("id", "fjfkle352");
-            Optional<User> id = userRepository.findByUserId("id");
-            userRepository.delete(id.get());
+            Optional<User> id = userService.findByUserId("id");
+            userService.deleteUser(id.get().getLoginId());
             userService.deleteUser(login.get(0));
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -151,7 +149,7 @@ public class UserServiceTest {
             System.out.println(userDto);
             em.flush();
             em.clear();
-            User id2 = userRepository.findByUserId("id").get();
+            User id2 = userService.findByUserId("id").get();
             return;
         } catch (Exception e) {
             System.out.println(e.getMessage());

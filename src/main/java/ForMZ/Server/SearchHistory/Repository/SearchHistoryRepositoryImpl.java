@@ -31,5 +31,6 @@ public class SearchHistoryRepositoryImpl extends Querydsl4RepositorySupport impl
         return selectFrom(searchHistory).join(searchHistory.user,user).where(user.id.eq(userId)).fetch();
     }
 
+
     //26,32~35
 }

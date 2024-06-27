@@ -110,7 +110,12 @@ public class PostService {
     public void saveAll(List<Post> posts){
         postRepository.saveAll(posts);
     }
-
+    public List<BookMarkPost> BookMarkPostList(Long bookMarkId){
+        return postRepository.BookMarkPostList(bookMarkId);
+    }
+    public List<PostDto> bookMark_Post(List<Long> bookMarkId){
+        return postRepository.BookMark_Post(bookMarkId).stream().map(this::getPostDto).toList();
+    }
 
     private PostDto getPostDto(Post post) {
         User postUser = post.getUser();

@@ -4,6 +4,9 @@ import ForMZ.Server.BookMark.Entity.BookMark;
 import ForMZ.Server.BookMark.Entity.BookMarkPost;
 import ForMZ.Server.BookMark.Repository.BookMarkPostRepository;
 import ForMZ.Server.BookMark.Repository.BookMarkRepository;
+import ForMZ.Server.BookMark.Service.BookMarkPostService;
+import ForMZ.Server.BookMark.Service.BookMarkService;
+import ForMZ.Server.Category.Service.CategoryService;
 import ForMZ.Server.Category.Entity.Category;
 import ForMZ.Server.Category.Repository.CategoryRepository;
 import ForMZ.Server.Post.Dto.PostDto;
@@ -29,27 +32,24 @@ class PostServiceTest {
     @Autowired
     UserService userService;
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    CategoryRepository categoryRepository;
-    @Autowired
     EntityManager em;
     @Autowired PostService postService;
     @Autowired
-    BookMarkRepository bookMarkRepository;
+    BookMarkService bookMarkService;
     @Autowired
-    PostRepository postRepository;
+    private CategoryService categoryService;
     @Autowired
-    BookMarkPostRepository bookMarkPostRepository;
+    private BookMarkPostService bookMarkPostService;
+
     @Test
     public void userPost(){
         UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
         userService.join(userJoinDto);
-        User id = userRepository.findByUserId("id").get();
+        User id = userService.findByUserId("id").get();
         BookMark bookMark = new BookMark();
         List<Post> posts= new ArrayList<>();
         Category category = new Category("임시");
-        categoryRepository.save(category);
+        categoryService.save(category);
         for(int i=0;i<10;i++) {
             Post post = new Post("1", "test1", 0, 0, PostType.posts);
             post.setUser(id);
@@ -69,14 +69,14 @@ class PostServiceTest {
         UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
         userService.join(userJoinDto);
         BookMark bookMark = new BookMark();
-        bookMarkRepository.save(bookMark);
-        User id = userRepository.findByUserId("id").get();
+        bookMarkService.save(bookMark);
+        User id = userService.findByUserId("id").get();
         id.settingBookMark(bookMark);
         em.flush();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
         List<BookMarkPost> bookMarkPostList = new ArrayList<>();
-        categoryRepository.save(category);
+        categoryService.save(category);
         for (int i = 0; i < 10; i++) {
             Post post = new Post("1", "test1", 0, 0, PostType.posts);
             post.setUser(id);
@@ -86,17 +86,15 @@ class PostServiceTest {
             posts.add(post);
         }
         postService.saveAll(posts);
-        bookMarkPostRepository.saveAll(bookMarkPostList);
+        bookMarkPostService.saveAll(bookMarkPostList);
 
         em.flush();
         em.clear();
         BookMark bookMark1 = id.getBookMark();
 
-        List<Long> d = postRepository.BookMarkPostList(bookMark1.getId()).stream().map(b->{
-            return b.getId();
-        }).toList();
-        List<Post> posts1 = postRepository.BookMark_Post(d);
-        for (Post post : posts1) {
+        List<Long> d = postService.BookMarkPostList(bookMark1.getId()).stream().map(BookMarkPost::getId).toList();
+        List<PostDto> posts1 = postService.bookMark_Post(d);
+        for (PostDto post : posts1) {
             System.out.println(post.toString());
         }
     }
