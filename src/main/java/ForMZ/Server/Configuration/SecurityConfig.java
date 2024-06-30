@@ -2,7 +2,6 @@ package ForMZ.Server.Configuration;
 
 
 
-import ForMZ.Server.Core.JwtTokenUtil;
 import ForMZ.Server.User.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +39,7 @@ public class SecurityConfig {
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         )
-                .addFilterBefore(new JwtFilter(secretKey,jwtTokenUtil,redisConfig), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(jwtTokenUtil,redisConfig), UsernamePasswordAuthenticationFilter.class);
 //                .exceptionHandling((exceptionConfig)->
 //                        exceptionConfig.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         return http.build();

@@ -1,8 +1,5 @@
 package ForMZ.Server.Configuration;
 
-import ForMZ.Server.Core.JwtTokenUtil;
-import ForMZ.Server.User.Service.UserService;
-
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -21,7 +18,6 @@ import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-    private final String secretKey;
     private final JwtTokenUtil jwtTokenUtil;
     private final RedisConfig redisConfig;
     private Long expireTimeMs = 1000*60*60L;

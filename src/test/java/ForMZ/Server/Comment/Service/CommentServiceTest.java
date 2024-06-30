@@ -4,7 +4,9 @@ import ForMZ.Server.Category.Service.CategoryService;
 import ForMZ.Server.Category.Entity.Category;
 import ForMZ.Server.Category.Repository.CategoryRepository;
 import ForMZ.Server.Comment.Dto.CommentDto;
+import ForMZ.Server.Comment.Dto.ReplyDto;
 import ForMZ.Server.Comment.Dto.ResCommentDto;
+import ForMZ.Server.Comment.Dto.ResRepliesDto;
 import ForMZ.Server.Comment.Entity.Comment;
 import ForMZ.Server.Post.Entity.Post;
 import ForMZ.Server.Post.Entity.PostType;
@@ -113,6 +115,67 @@ class CommentServiceTest {
         commentService.ChangeComment("change_test",1L);
         System.out.println(commentService.findById(1L));
     }
+    @Test
+    public void replyTest() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto2 = new UserJoinDto("id2", "fjfkle352", "www@www.com", "replyUser", "type", "/ee");
+        userService.join(userJoinDto);
+        userService.join(userJoinDto2);
+        User id = userService.findByUserId("id").get();
+        User id2 = userService.findByUserId("id2").get();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 10; i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        ResCommentDto commentDto = new ResCommentDto(id.getId(),posts.get(0).getId(),"a");
+        commentService.addComment(commentDto);
+        List<Comment> reply = new ArrayList<>();
+        for(int i=0;i<10;i++) {
+            ResRepliesDto repliesDto = new ResRepliesDto(id2.getId(),1L,"reply");
+            commentService.addReplies(repliesDto);
+        }
+        em.flush();
+        em.clear();
+        List<ReplyDto> replyDtos = commentService.commentReplies(1L);
+        for (ReplyDto replyDto : replyDtos) {
+            System.out.println(replyDto);
+        }
+    }
 
-
+    @Test
+    public void deleteComment() throws Exception {
+        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto2 = new UserJoinDto("id2", "fjfkle352", "www@www.com", "replyUser", "type", "/ee");
+        userService.join(userJoinDto);
+        userService.join(userJoinDto2);
+        User id = userService.findByUserId("id").get();
+        User id2 = userService.findByUserId("id2").get();
+        List<Post> posts = new ArrayList<>();
+        Category category = new Category("임시");
+        categoryService.save(category);
+        for (int i = 0; i < 10; i++) {
+            Post post = new Post("1", "test1", 0, 0, PostType.posts);
+            post.setUser(id);
+            post.setCategories(category);
+            posts.add(post);
+        }
+        postService.saveAll(posts);
+        ResCommentDto commentDto = new ResCommentDto(id.getId(),posts.get(0).getId(),"a");
+        commentService.addComment(commentDto);
+        List<Comment> reply = new ArrayList<>();
+        for(int i=0;i<10;i++) {
+            ResRepliesDto repliesDto = new ResRepliesDto(id2.getId(),1L,"reply");
+            commentService.addReplies(repliesDto);
+        }
+        em.flush();
+        em.clear();
+        commentService.DeleteComment(11L);
+        em.flush();
+    }
 }

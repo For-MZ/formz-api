@@ -1,9 +1,6 @@
 package ForMZ.Server.User.Service;
 
-import ForMZ.Server.BookMark.Repository.BookMarkRepository;
-import ForMZ.Server.Configuration.EncoderConfig;
-import ForMZ.Server.Core.JwtTokenUtil;
-import ForMZ.Server.Post.Entity.Post;
+import ForMZ.Server.Configuration.JwtTokenUtil;
 import ForMZ.Server.User.Dto.ChangeProFileDto;
 import ForMZ.Server.User.Dto.UserDto;
 import ForMZ.Server.User.Dto.UserJoinDto;
@@ -17,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @RequiredArgsConstructor
