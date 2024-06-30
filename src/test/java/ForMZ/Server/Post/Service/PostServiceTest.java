@@ -318,4 +318,9 @@ class PostServiceTest {
             System.out.println(e.getMessage());
         }
     }
+
+    @Test
+    public void book_mark_post(){
+
+    }
 }
