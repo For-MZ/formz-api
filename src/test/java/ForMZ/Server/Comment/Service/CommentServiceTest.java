@@ -38,9 +38,9 @@ class CommentServiceTest {
 
     @Test
     void userCommnetTest() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto( "fjfkle352", "www@www.com", "user", "/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
         categoryService.save(category);
@@ -64,9 +64,9 @@ class CommentServiceTest {
 
     @Test
     void postCommentTest() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto( "fjfkle352", "www@www.com", "user", "/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
         categoryService.save(category);
@@ -92,9 +92,9 @@ class CommentServiceTest {
 
     @Test
     void changeCommentTest() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto( "fjfkle352", "www@www.com", "user", "/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
         categoryService.save(category);
@@ -117,12 +117,12 @@ class CommentServiceTest {
     }
     @Test
     public void replyTest() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
-        UserJoinDto userJoinDto2 = new UserJoinDto("id2", "fjfkle352", "www@www.com", "replyUser", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto( "fjfkle352", "www@www.com", "user", "/ee");
+        UserJoinDto userJoinDto2 = new UserJoinDto("fjfkle352", "www@www.com2", "replyUser",  "/ee");
         userService.join(userJoinDto);
         userService.join(userJoinDto2);
-        User id = userService.findByUserId("id").get();
-        User id2 = userService.findByUserId("id2").get();
+        User id = userService.findByUserId("www@www.com").get();
+        User id2 = userService.findByUserId("www@www.com2").get();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
         categoryService.save(category);
@@ -150,12 +150,12 @@ class CommentServiceTest {
 
     @Test
     public void deleteComment() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
-        UserJoinDto userJoinDto2 = new UserJoinDto("id2", "fjfkle352", "www@www.com", "replyUser", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto( "fjfkle352", "www@www.com", "user", "/ee");
+        UserJoinDto userJoinDto2 = new UserJoinDto("fjfkle352", "www@www.com2", "replyUser",  "/ee");
         userService.join(userJoinDto);
         userService.join(userJoinDto2);
-        User id = userService.findByUserId("id").get();
-        User id2 = userService.findByUserId("id2").get();
+        User id = userService.findByUserId("www@www.com").get();
+        User id2 = userService.findByUserId("www@www.com2").get();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
         categoryService.save(category);

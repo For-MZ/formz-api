@@ -4,19 +4,15 @@ import lombok.Data;
 
 @Data
 public class UserJoinDto {
-    String loginId;
     String password;
     String email;
     String nickname;
-    String loginType;
     String profileImageUrl;
 
-    public UserJoinDto(String loginId, String password, String email, String nickname, String loginType, String profileImageUrl) {
-        this.loginId = loginId;
+    public UserJoinDto( String password, String email, String nickname, String profileImageUrl) {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
-        this.loginType = loginType;
         this.profileImageUrl = profileImageUrl;
     }
 }

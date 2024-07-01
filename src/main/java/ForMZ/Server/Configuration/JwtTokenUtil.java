@@ -21,21 +21,19 @@ import java.util.List;
 
 @Getter
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public class JwtTokenUtil {
 
     @Value("${jwt.token.secret}")
     private String secretKey;
 
-    @Value("${jwt.token.secret}")
     public Boolean isExpired(String token){
         byte[] accessSecret = secretKey.getBytes(StandardCharsets.UTF_8);
         return Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(accessSecret)).parseClaimsJws(token).getBody()
                 .getExpiration().before(new Date());
     }
-    public String createToken(String id, long expireTimeMs){
-        Claims claims = Jwts.claims().setSubject(id);
+    public String createToken(String email, long expireTimeMs){
+        Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles","user");
         byte[] accessSecret = secretKey.getBytes(StandardCharsets.UTF_8);
         return Jwts.builder()
@@ -59,9 +57,9 @@ public class JwtTokenUtil {
 
     }
 
-    public String createReFreshToken(String id,Long expireTimeMs) {
+    public String createReFreshToken(String email,Long expireTimeMs) {
         byte[] accessSecret = secretKey.getBytes(StandardCharsets.UTF_8);
-        Claims claims = Jwts.claims().setSubject(id);
+        Claims claims = Jwts.claims().setSubject(email);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))//시작시간

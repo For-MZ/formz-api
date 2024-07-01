@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.ExceptionHandlingDsl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -32,15 +33,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // 크로스 사이트
                 .cors(Customizer.withDefaults()) //크로스사이트
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/login","/join").permitAll()
+                        .requestMatchers("/login","/api/sign-up").permitAll()
                         .requestMatchers(HttpMethod.GET).authenticated()
                         .requestMatchers(HttpMethod.POST).authenticated()
+                        .requestMatchers(HttpMethod.DELETE).authenticated()
+                        .requestMatchers(HttpMethod.PATCH).authenticated()
                 )
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         )
                 .addFilterBefore(new JwtFilter(jwtTokenUtil,redisConfig), UsernamePasswordAuthenticationFilter.class);
-//                .exceptionHandling((exceptionConfig)->
+//        .ExceptionHandlingDsl((exceptionConfig)->
 //                        exceptionConfig.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         return http.build();
     }

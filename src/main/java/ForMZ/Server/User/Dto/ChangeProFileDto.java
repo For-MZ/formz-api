@@ -8,7 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ChangeProFileDto {
     private String email;
-    private String nickName;
+    private String nickname;
     private String password;
     private String profileImage;
 }

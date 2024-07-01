@@ -27,10 +27,6 @@ public class User extends BaseEntity {
     @Column(name="user_id")
     private Long id;
 
-    @Column(name = "login_id", unique = true)
-    @Size(max = 50)
-    @NotNull
-    private String loginId;
 
     @NotNull
     private String password;
@@ -47,15 +43,9 @@ public class User extends BaseEntity {
     @Size(max = 100)
     private String socialId;
 
-    @Column(name = "login_type")
-    @NotNull
-    private String loginType;
-
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-//    @NotNull
-//    private Boolean withdraw;
 
     @Column(name = "withdraw_time")
     @CreationTimestamp private LocalDateTime withdrawTime;
@@ -76,7 +66,7 @@ public class User extends BaseEntity {
 
     public void changeProfile(ChangeProFileDto changeProFile){
         this.email = changeProFile.getEmail();
-        this.nickname = changeProFile.getNickName();
+        this.nickname = changeProFile.getNickname();
         this.password = changeProFile.getPassword();
         this.profileImageUrl = changeProFile.getProfileImage();
     }
@@ -85,12 +75,10 @@ public class User extends BaseEntity {
         bookMark.settingUser(this);
     }
 
-    public User(String loginId, String password, String email, String nickname, String loginType, String profileImageUrl) {
-        this.loginId = loginId;
+    public User(String password, String email, String nickname, String profileImageUrl) {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
-        this.loginType = loginType;
         this.profileImageUrl = profileImageUrl;
     }
 
