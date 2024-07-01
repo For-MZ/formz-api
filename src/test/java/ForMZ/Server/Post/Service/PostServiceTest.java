@@ -51,9 +51,9 @@ class PostServiceTest {
 
     @Test
     public void userPost(){
-        UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts= new ArrayList<>();
         Category category = new Category("임시");
@@ -74,11 +74,11 @@ class PostServiceTest {
     }
     @Test
     public void userBookMarkPost() {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
         BookMark bookMark = new BookMark();
         bookMarkService.save(bookMark);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         id.settingBookMark(bookMark);
         em.flush();
         List<Post> posts = new ArrayList<>();
@@ -108,9 +108,9 @@ class PostServiceTest {
     }
     @Test
     public void find_posts(){
-        UserJoinDto userJoinDto = new UserJoinDto("id","fjfkle352","www@www.com","user","type","/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts= new ArrayList<>();
         Category category = new Category("임시");
@@ -132,9 +132,9 @@ class PostServiceTest {
     }
     @Test
     public void find_post_error() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
@@ -158,9 +158,9 @@ class PostServiceTest {
     }
     @Test
     public void find_post_normal() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
@@ -184,9 +184,9 @@ class PostServiceTest {
     }
     @Test
     public void change_post_error() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
@@ -212,9 +212,9 @@ class PostServiceTest {
     }
     @Test
     public void change_post_normal() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
@@ -240,9 +240,9 @@ class PostServiceTest {
     }
     @Test
     public void delete_post_error() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
@@ -266,9 +266,9 @@ class PostServiceTest {
     }
     @Test
     public void delete_post_normal() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
@@ -292,9 +292,9 @@ class PostServiceTest {
     }
     @Test
     public void best_post_normal() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
-        User id = userService.findByUserId("id").get();
+        User id = userService.findByUserId("www@www.com").get();
         BookMark bookMark = new BookMark();
         List<Post> posts = new ArrayList<>();
         Category category = new Category("임시");
@@ -317,5 +317,10 @@ class PostServiceTest {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    @Test
+    public void book_mark_post(){
+
     }
 }

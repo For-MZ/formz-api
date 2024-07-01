@@ -1,4 +1,4 @@
-package ForMZ.Server.Core;
+package ForMZ.Server.Configuration;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -21,9 +21,9 @@ import java.util.List;
 
 @Getter
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public class JwtTokenUtil {
+
     @Value("${jwt.token.secret}")
     private String secretKey;
 
@@ -32,15 +32,14 @@ public class JwtTokenUtil {
         return Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(accessSecret)).parseClaimsJws(token).getBody()
                 .getExpiration().before(new Date());
     }
-    public String createToken(String id, long expireTimeMs){
-        Claims claims = Jwts.claims().setSubject(id);
+    public String createToken(String email, long expireTimeMs){
+        Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles","user");
         byte[] accessSecret = secretKey.getBytes(StandardCharsets.UTF_8);
         return Jwts.builder()
                 .setClaims(claims)//정보를 넣어줌 claims가 포함된 jwt빌더를 반환
                 .setIssuedAt(new Date(System.currentTimeMillis()))//시작시간
                 .setExpiration(new Date(System.currentTimeMillis()+expireTimeMs))//만료시간
-//                .signWith(SignatureAlgorithm.HS256,key)
                 .signWith(Keys.hmacShaKeyFor(accessSecret))
                 .compact();
 
@@ -56,21 +55,18 @@ public class JwtTokenUtil {
             return e.getClaims();
         }
 
-
     }
 
-    public String createReFreshToken(String id,Long expireTimeMs) {
+    public String createReFreshToken(String email,Long expireTimeMs) {
         byte[] accessSecret = secretKey.getBytes(StandardCharsets.UTF_8);
-        Claims claims = Jwts.claims().setSubject(id);
+        Claims claims = Jwts.claims().setSubject(email);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))//시작시간
                 .setExpiration(new Date(System.currentTimeMillis() + expireTimeMs * 100))//만료시간
-//                .signWith(SignatureAlgorithm.HS256,key)
                 .signWith(Keys.hmacShaKeyFor(accessSecret))
                 .compact();
     }
-    // Request의 Header에서 AccessToken 값을 가져옵니다. "authorization" : "token'
     public String resolveAccessToken(HttpServletRequest request) {
         if(request.getHeader("authorization") != null )
             return request.getHeader("authorization").substring(7);
@@ -88,14 +84,10 @@ public class JwtTokenUtil {
     }
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         Object no = this.getclaims(token).getSubject();
-        return new UsernamePasswordAuthenticationToken(no, "", List.of(new SimpleGrantedAuthority("Member")));
+        return new UsernamePasswordAuthenticationToken(no, "", List.of(new SimpleGrantedAuthority("user")));
     }
     public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
         response.setHeader("authorization", "Bearer "+ accessToken);
     }
 
-    // 리프레시 토큰 헤더 설정
-    public void setHeaderRefreshToken(HttpServletResponse response, String refreshToken) {
-        response.setHeader("refreshToken", "bearer "+ refreshToken);
-    }
 }

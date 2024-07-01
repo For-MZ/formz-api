@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UserDto {
-    private String Id;
+    private Long Id;
     private String email;
     private String nickName;
     private String profileImage;

@@ -29,11 +29,11 @@ class SearchHistoryServiceTest {
 
     @Test
     public void findUserSearchHistory_ERROR() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352", "www@www.com", "user","/ee");
         userService.join(userJoinDto);
         em.flush();
         em.clear();
-        Optional<User> id = userService.findByUserId("id");
+        Optional<User> id = userService.findByUserId("www@www.com");
         try {
             List<searchHistoryDto> searchHistoryDtos = searchHistoryService.FindUserSearchHistory(id.get().getId());
             for (searchHistoryDto searchHistoryDto : searchHistoryDtos) {
@@ -46,11 +46,11 @@ class SearchHistoryServiceTest {
     }
     @Test
     public void findUserSearchHistory() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352", "www@www.com", "user","/ee");
         userService.join(userJoinDto);
         em.flush();
         em.clear();
-        Optional<User> id = userService.findByUserId("id");
+        Optional<User> id = userService.findByUserId("www@www.com");
         SearchHistory searchHistory = new SearchHistory("find");
         searchHistoryService.save(searchHistory);
         searchHistory.setUser(id.get());
@@ -63,11 +63,11 @@ class SearchHistoryServiceTest {
     }
     @Test
     public void deleteUserSearchHistory_ERROR() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352", "www@www.com", "user","/ee");
         userService.join(userJoinDto);
         em.flush();
         em.clear();
-        Optional<User> id = userService.findByUserId("id");
+        Optional<User> id = userService.findByUserId("www@www.com");
         em.flush();
         em.clear();
         try {
@@ -78,11 +78,11 @@ class SearchHistoryServiceTest {
     }
     @Test
     public void deleteUserSearchHistory() throws Exception {
-        UserJoinDto userJoinDto = new UserJoinDto("id", "fjfkle352", "www@www.com", "user", "type", "/ee");
+        UserJoinDto userJoinDto = new UserJoinDto("fjfkle352", "www@www.com", "user","/ee");
         userService.join(userJoinDto);
         em.flush();
         em.clear();
-        Optional<User> id = userService.findByUserId("id");
+        Optional<User> id = userService.findByUserId("www@www.com");
         SearchHistory searchHistory = new SearchHistory("find");
         searchHistoryService.save(searchHistory);
         searchHistory.setUser(id.get());

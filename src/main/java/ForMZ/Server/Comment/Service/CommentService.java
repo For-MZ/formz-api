@@ -77,4 +77,13 @@ public class CommentService {
                 }
         ).toList();
     }
+    public CommentDto findById(Long id) throws Exception {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if(commentOptional.isEmpty()){
+            throw new Exception("존재하지않는 댓글 입니다");
+        }
+        Comment comment = commentOptional.get();
+        return new CommentDto(comment.getId(),comment.getContent(),comment.getCreatedDate(),comment.getLastModifiedDate());
+    }
 }
+
