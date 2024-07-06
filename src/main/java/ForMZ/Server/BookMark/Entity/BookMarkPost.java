@@ -26,5 +26,7 @@ public class BookMarkPost {
     public BookMarkPost(Post posts, BookMark bookMarks) {
         this.posts = posts;
         this.bookMarks = bookMarks;
+        bookMarks.setBookMarkPostList(this);
     }
+
 }

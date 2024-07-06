@@ -36,9 +36,9 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
     }
 
 
-    public List<Post> FindPost(@Nullable String categoryName, List<String> words, final int startPage,final int PageSize){
+    public List<Post> FindPost(@Nullable String categoryName,String word, final int startPage,final int PageSize){
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        for (String word : words) {
+        if(word!=null){
             booleanBuilder.and(post.title.like("%" + word + "%"));
         }
         return selectFrom(post).join(post.categories, category).fetchJoin().join(post.user, user).fetchJoin()
@@ -59,8 +59,6 @@ public class PostRepositoryImpl extends Querydsl4RepositorySupport implements Po
                 .orderBy(post.view_count.desc(), post.like_count.desc()).limit(PageSize).fetch();
     }
     //24
-
-
     public List<Post> findUserPost(Long userId){
         return selectFrom(post).join(post.user, user).fetchJoin().leftJoin(post.commentList, comment).fetchJoin().leftJoin(post.categories, category).fetchJoin().where(user.id.eq(userId),post.type.eq(PostType.posts)).fetch();
     }

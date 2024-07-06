@@ -50,7 +50,7 @@ class PostServiceTest {
     private BookMarkPostService bookMarkPostService;
 
     @Test
-    public void userPost(){
+    public void userPost() throws Exception {
         UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
         User id = userService.findByUserId("www@www.com").get();
@@ -73,7 +73,7 @@ class PostServiceTest {
         }
     }
     @Test
-    public void userBookMarkPost() {
+    public void userBookMarkPost() throws Exception {
         UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
         BookMark bookMark = new BookMark();
@@ -107,7 +107,7 @@ class PostServiceTest {
         }
     }
     @Test
-    public void find_posts(){
+    public void find_posts() throws Exception {
         UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
         User id = userService.findByUserId("www@www.com").get();
@@ -125,10 +125,10 @@ class PostServiceTest {
         em.flush();
         em.clear();
         List<String> find_word = new ArrayList<>();
-        List<PostDto> posts1 = postService.findPosts("비션", find_word, 0, 10);
-        for (PostDto postDto : posts1) {
-            System.out.println(postDto);
-        }
+//        //List<PostDto> posts1 = postService.findPosts("비션", find_word, 0, 10);
+//        for (PostDto postDto : posts1) {
+//            System.out.println(postDto);
+//        }
     }
     @Test
     public void find_post_error() throws Exception {

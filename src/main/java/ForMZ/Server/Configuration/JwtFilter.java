@@ -42,6 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String no1 = jwtTokenUtil.getclaims(AccessToken).getSubject();
             System.out.println(no1);
             String refreshToken = redisConfig.redisTemplate().opsForValue().get(no1);
+            System.out.println(refreshToken);
             if(refreshToken == null){
                 logger.error("토큰도만료 리스레스 토큰도 없거나 만료");
             }

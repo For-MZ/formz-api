@@ -12,12 +12,14 @@ import ForMZ.Server.User.Entity.User;
 import ForMZ.Server.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
@@ -30,13 +32,16 @@ public class CommentService {
         }).toList();
     }
     //12번
-    public List<CommentDto> findPostComment(Long postId){
+    public List<CommentDto> findPostComment(Long postId) throws Exception {
+        if(postRepository.findById(postId).isEmpty()){
+            throw new Exception("존재하지않는 게시물입니다");
+        };
         List<Comment> postComment = commentRepository.postAllComment(postId);
         return postComment.stream().map(c->{
             return new CommentDto(c.getId(),c.getContent(),c.getCreatedDate(),c.getLastModifiedDate());
         }).toList();
     }
-
+    @Transactional
     public void addComment(ResCommentDto addCommentDto) throws Exception {
         Optional<User> user = userRepository.findById(addCommentDto.getUserId());
         if(user.isEmpty()) throw new Exception("존재하지않는 사용자입니다");
@@ -45,25 +50,29 @@ public class CommentService {
         Comment comment = new Comment(addCommentDto.getContent(),user.get(),post.get());
         commentRepository.save(comment);
     }
+    @Transactional
     public void DeleteComment(Long commentId) throws Exception {
         Optional<Comment> comment = commentRepository.findById(commentId);
         if(comment.isEmpty()) throw new Exception("존재하지않는 댓글입니다");
         commentRepository.delete(comment.get());
     }//30,35
-    public void ChangeComment(String content,Long commentId) throws Exception {
+    @Transactional
+    public Long ChangeComment(String content, Long commentId) throws Exception {
         Optional<Comment> comment = commentRepository.findById(commentId);
         if(comment.isEmpty()) throw new Exception("존재하지않는 댓글입니다");
         Comment findComment = comment.get();
         findComment.ChangeContent(content);
         commentRepository.save(findComment);
+        return findComment.getId();
     }
     //29,34
-    public void addReplies(ResRepliesDto resRepliesDto) throws Exception {
+    @Transactional
+    public void addReplies(ResRepliesDto resRepliesDto,Long UserId) throws Exception {
         Optional<Comment> findComment = commentRepository.findWithPost(resRepliesDto.getCommentId());
         if(findComment.isEmpty()) throw new Exception("존재하지않는 댓글입니다");
         Optional<Post> post = postRepository.findById(findComment.get().getId());
         if (post.isEmpty()) throw new Exception("존재하지않는 게시글입니다");
-        Optional<User> user = userRepository.findById(resRepliesDto.getUserId());
+        Optional<User> user = userRepository.findById(UserId);
         if (user.isEmpty()) throw new Exception("존재하지않는 사용자입니다");
         Comment replies = new Comment(resRepliesDto.getContent(),user.get(),post.get());
         replies.setParent(findComment.get());

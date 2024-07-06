@@ -38,7 +38,7 @@ public class UserServiceTest {
         }
     }
     @Test
-    public void join_normal_test(){
+    public void join_normal_test() throws Exception {
         UserJoinDto userJoinDto = new UserJoinDto("fjfkle352","www@www.com","user","/ee");
         userService.join(userJoinDto);
         em.clear();
