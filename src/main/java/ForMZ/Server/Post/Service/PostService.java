@@ -45,10 +45,12 @@ public class PostService {
         return posts.stream().map(this::getPostDto).toList();
     }
     //11번
-    public List<PostDto> findPosts(@Nullable String category_name, @Nullable String word,final int startPage, final int PageSize){
+    @Transactional
+    public List<PostDto> findPosts(@Nullable String category_name, @Nullable String word,final int startPage, final int PageSize,String userEmail){
         List<Post> posts = postRepository.FindPost(category_name, word, startPage,PageSize);
         if(word!=null){
-            searchHistoryRepository.save(new SearchHistory(word));
+            User user = userRepository.findByUserEmail(userEmail).get();
+            searchHistoryRepository.save(new SearchHistory(word,user));
         }
         return posts.stream().map(this::getPostDto).toList();
     }
@@ -112,6 +114,7 @@ public class PostService {
     public List<PostDto> bookMark_Post(List<Long> bookMarkId){
         return postRepository.BookMark_Post(bookMarkId).stream().map(this::getPostDto).toList();
     }
+    @Transactional
     public void BookMarkPost(Long postId,String userEmail) throws Exception {
         Optional<User> user = userRepository.findByUserEmail(userEmail);
         if(user.isEmpty()) {

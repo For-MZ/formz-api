@@ -27,7 +27,7 @@ public class UserController {
             UserLoginResponseDto res = new UserLoginResponseDto(token, "성공적으로 로그인 하셧습니다");
             return ResponseEntity.status(200).body(res);
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
             return ResponseEntity.status(401).build();
         }
     }

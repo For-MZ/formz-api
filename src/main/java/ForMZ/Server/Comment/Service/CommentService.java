@@ -42,13 +42,14 @@ public class CommentService {
         }).toList();
     }
     @Transactional
-    public void addComment(ResCommentDto addCommentDto) throws Exception {
+    public Long addComment(ResCommentDto addCommentDto) throws Exception {
         Optional<User> user = userRepository.findById(addCommentDto.getUserId());
         if(user.isEmpty()) throw new Exception("존재하지않는 사용자입니다");
         Optional<Post> post = postRepository.findById(addCommentDto.getPostId());
         if(post.isEmpty()) throw new Exception("존재하지않는 게시물입니다");
         Comment comment = new Comment(addCommentDto.getContent(),user.get(),post.get());
         commentRepository.save(comment);
+        return comment.getId();
     }
     @Transactional
     public void DeleteComment(Long commentId) throws Exception {
@@ -62,21 +63,22 @@ public class CommentService {
         if(comment.isEmpty()) throw new Exception("존재하지않는 댓글입니다");
         Comment findComment = comment.get();
         findComment.ChangeContent(content);
-        commentRepository.save(findComment);
+
         return findComment.getId();
     }
     //29,34
     @Transactional
-    public void addReplies(ResRepliesDto resRepliesDto,Long UserId) throws Exception {
+    public Long addReplies(ResRepliesDto resRepliesDto, Long UserId) throws Exception {
         Optional<Comment> findComment = commentRepository.findWithPost(resRepliesDto.getCommentId());
         if(findComment.isEmpty()) throw new Exception("존재하지않는 댓글입니다");
-        Optional<Post> post = postRepository.findById(findComment.get().getId());
+        Optional<Post> post = postRepository.findById(findComment.get().getPost().getId());
         if (post.isEmpty()) throw new Exception("존재하지않는 게시글입니다");
         Optional<User> user = userRepository.findById(UserId);
         if (user.isEmpty()) throw new Exception("존재하지않는 사용자입니다");
         Comment replies = new Comment(resRepliesDto.getContent(),user.get(),post.get());
         replies.setParent(findComment.get());
         commentRepository.save(replies);
+        return replies.getId();
     }
     public List<ReplyDto> commentReplies(Long commentId) throws Exception {
         List<Comment> reply = commentRepository.reply(commentId);

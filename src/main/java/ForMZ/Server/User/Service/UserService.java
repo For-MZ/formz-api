@@ -53,7 +53,7 @@ public class UserService {
         String Access_token = jwtTokenUtil.createToken(user.getEmail(),expireTimeMs);
         String reFresh_token = jwtTokenUtil.createReFreshToken(user.getEmail(),expireTimeMs);
         System.out.println(reFresh_token);
-        redisConfig.redisTemplate().opsForValue().set(user.getId().toString(),reFresh_token, Duration.ofHours(3));
+        redisConfig.redisTemplate().opsForValue().set(user.getEmail(),reFresh_token, Duration.ofHours(3));
         return Access_token;
     }
     @Transactional

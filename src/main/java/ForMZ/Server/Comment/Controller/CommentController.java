@@ -1,8 +1,6 @@
 package ForMZ.Server.Comment.Controller;
 
-import ForMZ.Server.Comment.Dto.CommentDto;
-import ForMZ.Server.Comment.Dto.ReplyDto;
-import ForMZ.Server.Comment.Dto.ResRepliesDto;
+import ForMZ.Server.Comment.Dto.*;
 import ForMZ.Server.Comment.Service.CommentService;
 import ForMZ.Server.Configuration.JwtTokenUtil;
 import ForMZ.Server.Core.Dto.JoinDto;
@@ -23,7 +21,7 @@ public class CommentController {
     private final JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/api/user/comment")
-    public ResponseEntity<List<CommentDto>> userCommnet(HttpServletRequest request) throws Exception {
+    public ResponseEntity<List<CommentDto>> userComment(HttpServletRequest request) throws Exception {
         try {
             String accessToken = jwtTokenUtil.resolveAccessToken(request);
             Long userId = userService.findUserProfile(accessToken).getId();
@@ -32,6 +30,18 @@ public class CommentController {
         }
         catch (Exception e){
             return ResponseEntity.status(401).build();
+        }
+    }
+
+    @PostMapping("/community/comments")
+    public ResponseEntity<JoinDto> userAddComment(@RequestBody ResCommentDto resCommentDto){
+        try {
+            Long commentId = commentService.addComment(resCommentDto);
+            JoinDto joinDto = new JoinDto(commentId,"댓글이 성공적으로 작성되었습니다.");
+            return ResponseEntity.status(201).body(joinDto);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(404).build();
         }
     }
     @GetMapping("/community/comments/{post-id}")
@@ -46,9 +56,10 @@ public class CommentController {
 
     }
     @PatchMapping("/community/comments/{comment-id}")
-    public ResponseEntity<JoinDto> commentChange(@PathVariable("comment-id") Long commentId,String content){
+    public ResponseEntity<JoinDto> commentChange(@PathVariable("comment-id") Long commentId, @RequestBody CommentChangeDto commentChangeDto){
         try {
-            Long l = commentService.ChangeComment(content, commentId);
+            System.out.println(commentId);
+            Long l = commentService.ChangeComment(commentChangeDto.getContent(), commentId);
             return ResponseEntity.status(200).body(new JoinDto(l,"댓글이 성공적으로 수정되었습니다."));
         } catch (Exception e) {
             return ResponseEntity.status(404).build();
@@ -60,8 +71,8 @@ public class CommentController {
         try {
             String accessToken = jwtTokenUtil.resolveAccessToken(request);
             Long userId = userService.findUserProfile(accessToken).getId();
-            commentService.addReplies(repliesDto,userId);
-            return ResponseEntity.status(200).body(new JoinDto(repliesDto.getCommentId(),repliesDto.getContent()));
+            Long replyId = commentService.addReplies(repliesDto, userId);
+            return ResponseEntity.status(200).body(new JoinDto(replyId,repliesDto.getContent()));
         }
         catch (Exception e){
             return ResponseEntity.status(404).build();
@@ -80,9 +91,9 @@ public class CommentController {
 
     }
     @PatchMapping("/community/replies/{replyId}")
-    public ResponseEntity<String> commentReply(@PathVariable("replyId") Long replyId,String content){
+    public ResponseEntity<String> commentReply(@PathVariable("replyId") Long replyId,@RequestBody CommentChangeDto commentChangeDto){
         try {
-            Long l = commentService.ChangeComment(content, replyId);
+            Long l = commentService.ChangeComment(commentChangeDto.getContent(), replyId);
             return ResponseEntity.status(200).body("대댓글이 성공적으로 수정되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(404).build();

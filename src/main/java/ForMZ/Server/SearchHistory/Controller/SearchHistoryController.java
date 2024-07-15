@@ -1,17 +1,14 @@
 package ForMZ.Server.SearchHistory.Controller;
 
-import ForMZ.Server.Comment.Dto.CommentDto;
+import ForMZ.Server.Configuration.JwtTokenUtil;
 import ForMZ.Server.SearchHistory.Dto.searchHistoryDto;
+import ForMZ.Server.SearchHistory.Dto.searchHistoryJoinDto;
 import ForMZ.Server.SearchHistory.Service.SearchHistoryService;
 import ForMZ.Server.User.Service.UserService;
-import lombok.Getter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ import java.util.List;
 public class SearchHistoryController {
     private final UserService userService;
     private final SearchHistoryService searchHistoryService;
-
+    private final JwtTokenUtil jwtTokenUtil;
     @GetMapping("/searchWords/{userId}")
     public ResponseEntity<List<searchHistoryDto>> userSearchHistory(@PathVariable("userId") Long userId) {
         try {

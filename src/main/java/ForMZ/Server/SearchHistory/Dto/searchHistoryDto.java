@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class searchHistoryDto {
-    private Long searchWordId;
+    private Long searchHistoryId;
     private String searchWord;
 }

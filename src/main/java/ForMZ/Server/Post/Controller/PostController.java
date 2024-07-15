@@ -66,9 +66,11 @@ public class PostController {
         }
     }
     @PostMapping("/api/posts")
-    public ResponseEntity<List<PostDto>> AllPost(@RequestBody ResPostsDto resPostsDto){
+    public ResponseEntity<List<PostDto>> AllPost(@RequestBody ResPostsDto resPostsDto,HttpServletRequest request){
+        String accessToken = jwtTokenUtil.resolveAccessToken(request);
+        String email = jwtTokenUtil.getclaims(accessToken).getSubject();
         int pageNumber = resPostsDto.getPage();
-        List<PostDto> posts = postService.findPosts(resPostsDto.getCategory(), resPostsDto.getWord(), pageNumber, 10);
+        List<PostDto> posts = postService.findPosts(resPostsDto.getCategory(), resPostsDto.getWord(), pageNumber, 10,email);
         return ResponseEntity.status(200).body(posts);
     }
     @PostMapping("/api/post/{postId}")
@@ -121,6 +123,7 @@ public class PostController {
             return ResponseEntity.status(200).body(dtos);
 
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(404).build();
         }
     }
