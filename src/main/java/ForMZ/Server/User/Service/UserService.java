@@ -9,7 +9,6 @@ import ForMZ.Server.User.Dto.UserDto;
 import ForMZ.Server.User.Dto.UserJoinDto;
 import ForMZ.Server.User.Entity.User;
 import ForMZ.Server.User.Repository.UserRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,7 +53,7 @@ public class UserService {
         String Access_token = jwtTokenUtil.createToken(user.getEmail(),expireTimeMs);
         String reFresh_token = jwtTokenUtil.createReFreshToken(user.getEmail(),expireTimeMs);
         System.out.println(reFresh_token);
-        redisConfig.redisTemplate().opsForValue().set(user.getId().toString(),reFresh_token, Duration.ofHours(3));
+        redisConfig.redisTemplate().opsForValue().set(user.getEmail(),reFresh_token, Duration.ofHours(3));
         return Access_token;
     }
     @Transactional
@@ -94,8 +93,13 @@ public class UserService {
         userRepository.save(user1);
         return new UserDto(user1.getId(),user1.getEmail(),user1.getNickname(),user1.getProfileImageUrl());
     }
-    public Optional<User> findByUserId(String email){
-        return userRepository.findByUserEmail(email);
+    public Optional<User> findByUserId(String email) throws Exception {
+        Optional<User> byUserEmail = userRepository.findByUserEmail(email);
+        if(byUserEmail.isEmpty()){
+            throw new Exception("존재하지않는 회원입니다.");
+        }
+        return byUserEmail;
     }
+
 
 }

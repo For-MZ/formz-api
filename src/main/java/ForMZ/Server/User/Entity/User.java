@@ -32,11 +32,9 @@ public class User extends BaseEntity {
     private String password;
 
     @NotNull
-    @Size(max = 50)
     private String email;
 
     @NotNull
-    @Size(max = 10)
     private String nickname;
 
     @Column(name = "social_id")

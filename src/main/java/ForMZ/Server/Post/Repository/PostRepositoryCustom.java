@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PostRepositoryCustom {
     List<Post> findUserPost(Long userId);
-    List<Post> FindPost(String categoryName, List<String> words, final int startPage, final int pageSize);
+    List<Post> FindPost(String categoryName, String word, final int startPage, final int pageSize);
     Optional<Post> FindPostById(Long id);
     List<Post> FindBestPost(int PageSize );
     List<Post> getDuplicationHouse();

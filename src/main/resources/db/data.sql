@@ -1,0 +1,1 @@
+insert into category (category_name) values ('tip'),('free'),('foundation'),('job'),('housing'),('policy');

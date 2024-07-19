@@ -13,10 +13,12 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 1000
-    #        show_sql: true
-    #        format_sql: true
+        #show_sql: true
+        format_sql: true
     #        use_sql_comments: true
     open-in-view: on
+    defer-datasource-initialization: true
+
 
 redis:
   host: 127.0.0.1

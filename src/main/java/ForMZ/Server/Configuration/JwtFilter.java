@@ -28,10 +28,8 @@ public class JwtFilter extends OncePerRequestFilter {
         logger.info("authentication : {"+AccessToken+"}");
         if(AccessToken == null){
             logger.error("access token이 존재하지 않습니다");
-            filterChain.doFilter(request,response);
-            return;
         }
-        if(jwtTokenUtil.validateToken(AccessToken)){
+        else if(jwtTokenUtil.validateToken(AccessToken)){
             UsernamePasswordAuthenticationToken authenticationToken = jwtTokenUtil.getAuthentication(AccessToken);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             LocalDateTime last = LocalDateTime.now();
@@ -40,7 +38,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         else {
             String no1 = jwtTokenUtil.getclaims(AccessToken).getSubject();
-            System.out.println(no1);
             String refreshToken = redisConfig.redisTemplate().opsForValue().get(no1);
             if(refreshToken == null){
                 logger.error("토큰도만료 리스레스 토큰도 없거나 만료");

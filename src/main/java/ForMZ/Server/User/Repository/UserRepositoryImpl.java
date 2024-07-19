@@ -25,14 +25,13 @@ public class UserRepositoryImpl extends Querydsl4RepositorySupport implements Us
     }
     @Override
     public Optional<User> findByUserEmail(String email) {
-        return Optional.ofNullable(selectFrom(user).where(user.email.eq(email)).fetchOne());
+        return Optional.ofNullable(selectFrom(user).join(user.bookMark,bookMark).fetchJoin().where(user.email.eq(email)).fetchOne());
     }
 
     //17번
     public Optional<User> UserWithBookMark(Long id){
         return Optional.ofNullable(
-                selectFrom(user).join(user.bookMark, bookMark).join(bookMark.bookMarkPostList,bookMarkPost)
-                        .join(bookMarkPost.posts,post).fetchJoin().where(user.id.eq(id)).fetchOne()
+                selectFrom(user).join(user.bookMark, bookMark).fetchJoin().where(user.id.eq(id)).fetchOne()
         );
     }
     //13

@@ -16,12 +16,15 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Comment extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="comment_id")
     private Long id;
+
     @NotNull
     private String content;
+
     @NotNull
     private int like_count;
 
@@ -57,4 +60,5 @@ public class Comment extends BaseEntity {
     public void ChangeContent(String content) {
         this.content = content;
     }
+
 }

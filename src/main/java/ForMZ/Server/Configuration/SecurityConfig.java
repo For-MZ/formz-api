@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // 크로스 사이트
                 .cors(Customizer.withDefaults()) //크로스사이트
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/login","/api/sign-up").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/login","/api/sign-up").permitAll()
                         .requestMatchers(HttpMethod.GET).authenticated()
                         .requestMatchers(HttpMethod.POST).authenticated()
                         .requestMatchers(HttpMethod.DELETE).authenticated()

@@ -26,4 +26,8 @@ public class BookMark {
     public void settingUser(User user){
         this.user = user;
     }
+
+    public void setBookMarkPostList(BookMarkPost bookMarkPost){
+        this.bookMarkPostList.add(bookMarkPost);
+    }
 }

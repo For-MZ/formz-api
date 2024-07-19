@@ -2,7 +2,7 @@ package ForMZ.Server.User.Controller;
 
 import ForMZ.Server.Configuration.JwtTokenUtil;
 import ForMZ.Server.User.Dto.*;
-import ForMZ.Server.User.Dto.UserSignUpResDto;
+import ForMZ.Server.Core.Dto.JoinDto;
 import ForMZ.Server.User.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,15 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;
     @PostMapping("/api/sign-up")
-    public ResponseEntity<UserSignUpResDto> sign_up(@RequestBody UserJoinDto userJoinDto) {
+    public ResponseEntity<JoinDto> sign_up(@RequestBody UserJoinDto userJoinDto) {
         Long user_id = userService.join(userJoinDto);
-        return ResponseEntity.status(201).body(new UserSignUpResDto(user_id,"성공적으로 회원가입이 완료되었습니다"));
+        return ResponseEntity.status(201).body(new JoinDto(user_id,"성공적으로 회원가입이 완료되었습니다"));
     }
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponseDto> login(@RequestBody UserLoginDto userLoginDto){
@@ -27,6 +27,7 @@ public class UserController {
             UserLoginResponseDto res = new UserLoginResponseDto(token, "성공적으로 로그인 하셧습니다");
             return ResponseEntity.status(200).body(res);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(401).build();
         }
     }
